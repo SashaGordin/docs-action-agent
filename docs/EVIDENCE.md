@@ -22,6 +22,7 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | Written request-path explanation | [Request-path evidence](LEARNING_MATRIX.md#request-path-explanation-evidence) | Produced; provider-adapter and deterministic validation gaps identified |
 | Provisional corpus decision | [ADR-006](DECISIONS.md#adr-006--provisional-fastapi-english-documentation-corpus) | FastAPI English docs selected; immutable pin and bounded paths due by 2026-10-06 |
 | Local version control | [Status](STATUS.md) | Git initialized on `main`; no remote or GitHub repository created |
+| Session artifact commit | `409ec75` | `Record Session 1 baseline and corpus decision` |
 | Session validation | [Status](STATUS.md#validation-state) | All Session 1 and documentation checks passed on 2026-09-23 |
 | Application tests/evaluations | — | Not applicable: Session 1 intentionally added no application code |
 

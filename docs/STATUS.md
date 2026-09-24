@@ -9,6 +9,7 @@
 ## Completed in Session 1
 
 - Initialized the directory as a local Git repository on `main`; no GitHub repository or remote was created.
+- Created root commit `409ec75` (`Record Session 1 baseline and corpus decision`).
 - Completed the concepts and request-path diagnostic from memory, including a correction attempt.
 - Recorded every baseline area with an `Explain`, `Build`, `Operate`, or `Defer` state and an evidence/gap note in `docs/LEARNING_MATRIX.md`.
 - Provisionally selected FastAPI English documentation in ADR-006.
@@ -35,6 +36,7 @@ Begin the Session 2 card in `docs/SPRINT.md`. Sasha should explain `uv sync`, `u
 | Planning documents agree on dates, scope, defaults, and gates | Passing | Manual cross-check on 2026-09-22 |
 | Session 1 learning matrix exists and contains required states | Passing | `test -f docs/LEARNING_MATRIX.md`; state grep passed on 2026-09-23 |
 | Local Git repository | Passing | Initialized on `main` on 2026-09-23 |
+| Session 1 artifact commit | Passing | `409ec75` |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Application tests | Not applicable | Session 1 intentionally added no application code |
 | Live provider call | Not run | Deliberately excluded from bootstrap |
