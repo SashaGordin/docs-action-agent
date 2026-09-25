@@ -37,6 +37,7 @@ Begin the Session 3 card in `docs/SPRINT.md`. Sasha should classify valid, missi
 | Session 1 learning matrix exists and contains required states | Passing | `test -f docs/LEARNING_MATRIX.md`; state grep passed on 2026-09-23 |
 | Local Git repository | Passing | Initialized on `main` on 2026-09-23 |
 | Session 1 artifact commit | Passing | `409ec75` |
+| Session 2 artifact commit | Passing | `03239ae` |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
 | Locked environment resolution | Passing | `uv sync --locked` resolved 7 packages on 2026-09-24 |

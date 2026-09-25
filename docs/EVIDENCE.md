@@ -35,7 +35,7 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | First test | [`tests/test_smoke.py`](../tests/test_smoke.py) | Package import and pytest discovery passed |
 | Concept explanation | [Status](STATUS.md) | Sasha distinguished project metadata, exact locked dependencies, project-scoped execution, and the limits of a passing unit test after targeted instruction |
 | Validation | [Status](STATUS.md#validation-state) | `uv sync --locked`; Python 3.12.14; `1 passed in 0.00s` |
-| Session artifact commit | — | Pending focused Session 2 commit |
+| Session artifact commit | `03239ae` | `Build Session 2 Python test harness` |
 
 ## Planned weekly evidence
 
