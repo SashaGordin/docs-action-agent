@@ -1,19 +1,19 @@
 # Current Status
 
-**Last updated:** 2026-09-23  
-**Sprint state:** Session 1 complete; application implementation not started  
+**Last updated:** 2026-09-24
+**Sprint state:** Session 2 complete; Python project and test harness established
 **Current week:** Week 1 — application foundations and vertical slice  
-**Current session:** Session 1 — baseline and corpus decision complete  
-**Next scheduled session:** Session 2 — 2026-09-24, 90 minutes
+**Current session:** Session 2 — Python project and test harness complete
+**Next scheduled session:** Session 3 — 2026-09-25, 30 minutes
 
-## Completed in Session 1
+## Completed in Session 2
 
-- Initialized the directory as a local Git repository on `main`; no GitHub repository or remote was created.
-- Created root commit `409ec75` (`Record Session 1 baseline and corpus decision`).
-- Completed the concepts and request-path diagnostic from memory, including a correction attempt.
-- Recorded every baseline area with an `Explain`, `Build`, `Operate`, or `Defer` state and an evidence/gap note in `docs/LEARNING_MATRIX.md`.
-- Provisionally selected FastAPI English documentation in ADR-006.
-- Kept application scaffolding, provider calls, ingestion, and credentials out of Session 1.
+- Diagnosed initial gaps in uv projects, lockfiles, project environments, and unit-test guarantees; completed a successful explanation check after targeted instruction.
+- Installed uv 0.12.18 through Homebrew and initialized a packaged Python project requiring Python 3.12 or newer.
+- Added pytest 9.1.1 to the `dev` dependency group and generated `uv.lock`.
+- Created the importable `docs_action_agent` package under `src/` with no application behavior.
+- Wrote a package-import smoke test and confirmed pytest discovery.
+- Documented the locked setup, Python-version check, and test command in `README.md`.
 
 ## Blocked or pending decisions
 
@@ -23,7 +23,7 @@
 
 ## Next action
 
-Begin the Session 2 card in `docs/SPRINT.md`. Sasha should explain `uv sync`, `uv run`, lockfiles, and unit-test guarantees from memory, then attempt the Python project and test harness. Target the demonstrated Python dependency and testing gaps; do not add FastAPI behavior yet.
+Begin the Session 3 card in `docs/SPRINT.md`. Sasha should classify valid, missing, and malformed request payloads, explain why validation belongs at the HTTP boundary, and then draft provider-independent Pydantic request/result models. Do not add routes, provider calls, or retrieval fields.
 
 ## Validation state
 
@@ -38,14 +38,20 @@ Begin the Session 2 card in `docs/SPRINT.md`. Sasha should explain `uv sync`, `u
 | Local Git repository | Passing | Initialized on `main` on 2026-09-23 |
 | Session 1 artifact commit | Passing | `409ec75` |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
-| Application tests | Not applicable | Session 1 intentionally added no application code |
+| Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
+| Locked environment resolution | Passing | `uv sync --locked` resolved 7 packages on 2026-09-24 |
+| Package import and pytest discovery | Passing | `uv run pytest -q` returned `1 passed in 0.00s` |
+| Application behavior | Not applicable | Session 2 intentionally added no product behavior |
 | Live provider call | Not run | Deliberately excluded from bootstrap |
 
 ## Current validation commands
 
-These documentation-only checks are safe to repeat:
+Run the project checks followed by the documentation checks:
 
 ```bash
+uv sync --locked
+uv run python --version
+uv run pytest -q
 test -f AGENTS.md && test -f README.md
 for file in SPEC SPRINT STATUS DECISIONS EVIDENCE SOURCES; do test -f "docs/${file}.md"; done
 test "$(grep -c '^### Session [0-9]' docs/SPRINT.md)" -eq 42

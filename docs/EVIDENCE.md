@@ -26,6 +26,17 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | Session validation | [Status](STATUS.md#validation-state) | All Session 1 and documentation checks passed on 2026-09-23 |
 | Application tests/evaluations | — | Not applicable: Session 1 intentionally added no application code |
 
+## 2026-09-24 — Session 2 Python project and test harness
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Reproducible project definition | [`pyproject.toml`](../pyproject.toml) and [`uv.lock`](../uv.lock) | Python 3.12+ project; pytest 9.1.1 isolated in the `dev` dependency group |
+| Package layout | [`src/docs_action_agent`](../src/docs_action_agent) | Importable `src/` package with no product behavior |
+| First test | [`tests/test_smoke.py`](../tests/test_smoke.py) | Package import and pytest discovery passed |
+| Concept explanation | [Status](STATUS.md) | Sasha distinguished project metadata, exact locked dependencies, project-scoped execution, and the limits of a passing unit test after targeted instruction |
+| Validation | [Status](STATUS.md#validation-state) | `uv sync --locked`; Python 3.12.14; `1 passed in 0.00s` |
+| Session artifact commit | — | Pending focused Session 2 commit |
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |

@@ -6,7 +6,7 @@ The capstone will become a domain-neutral, production-minded workflow over one a
 
 ## Current status
 
-Session 1 is complete and no application code has been implemented. The learning baseline is recorded, and FastAPI English documentation is provisionally selected pending an immutable version pin and bounded path allowlist.
+Session 2 is complete. The repository now has a reproducible Python 3.12 project, an importable `src/` package, and a passing pytest smoke test. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
 
 The workspace is a local Git repository on `main`. No GitHub repository or remote has been created.
 
@@ -40,4 +40,14 @@ The hosted model sits behind a small provider interface. An OpenAI-compatible lo
 
 One corpus, one index, one workflow, two read-only tools, one approval-gated draft tool, and no external writes. Kubernetes, fine-tuning, elaborate UI work, multi-agent orchestration, LangChain, MCP, and Pinecone are outside the default six-week scope.
 
-Setup and run commands will be added during Week 1 as Sasha builds the vertical slice. They are intentionally absent during planning-only bootstrap.
+The application behavior will be added incrementally during Week 1. The current harness intentionally tests only package import and test discovery.
+
+## Development setup
+
+```bash
+uv sync --locked
+uv run python --version
+uv run pytest -q
+```
+
+`uv sync --locked` synchronizes the project environment from the existing lockfile and fails if the lockfile is outdated. `uv run python --version` confirms the Python version selected for the project environment. `uv run pytest -q` runs the test suite inside that environment with concise output.

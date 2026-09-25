@@ -1,0 +1,18 @@
+[project]
+name = "docs-action-agent"
+version = "0.1.0"
+description = "An AI assistant for FastAPI documentation, built to learn AI engineering fundamentals"
+authors = [
+    { name = "SashaGordin", email = "55962431+SashaGordin@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.12.18,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
