@@ -37,6 +37,18 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | Validation | [Status](STATUS.md#validation-state) | `uv sync --locked`; Python 3.12.14; `1 passed in 0.00s` |
 | Session artifact commit | `03239ae` | `Build Session 2 Python test harness` |
 
+## 2026-09-25 — Session 3 typed HTTP boundary
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Provider-independent request/result contract | [`src/docs_action_agent/models.py`](../src/docs_action_agent/models.py) | `QuestionRequest` rejects missing, integer, empty, and whitespace-only questions; `QuestionResponse` limits status to `answered` or `abstained` |
+| Model validation tests | [`tests/test_models.py`](../tests/test_models.py) | Valid input, malformed input, serialization, and unsupported status covered |
+| Contract schema | [`QuestionRequest`](../src/docs_action_agent/models.py) | Generated schema requires a string with `minLength: 1`; no provider or retrieval fields |
+| Concept explanation | [Status](STATUS.md) | Sasha classified valid/missing/malformed payloads and explained boundary validation as fail-fast protection; corrected redirect versus client-error status categories |
+| Targeted resources | [Sources](SOURCES.md#fastapi-pydantic-and-pytest-primary-documentation) | Added exact Pydantic and pytest sections after the implementation diagnostic exposed missing mechanics |
+| Validation | [Status](STATUS.md#validation-state) | Locked sync passed; Python 3.12.14; `8 passed in 0.03s`; model import and schema generation passed |
+| Session artifact commit | `da1119e` | `Define Session 3 typed API contract` |
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |

@@ -1,19 +1,20 @@
 # Current Status
 
-**Last updated:** 2026-09-24
-**Sprint state:** Session 2 complete; Python project and test harness established
+**Last updated:** 2026-09-25
+**Sprint state:** Session 3 complete; typed request/response contract established
 **Current week:** Week 1 — application foundations and vertical slice  
-**Current session:** Session 2 — Python project and test harness complete
-**Next scheduled session:** Session 3 — 2026-09-25, 30 minutes
+**Current session:** Session 3 — typed HTTP boundary complete
+**Next scheduled session:** Session 4 — 2026-09-26, 3 hours
 
-## Completed in Session 2
+## Completed in Session 3
 
-- Diagnosed initial gaps in uv projects, lockfiles, project environments, and unit-test guarantees; completed a successful explanation check after targeted instruction.
-- Installed uv 0.12.18 through Homebrew and initialized a packaged Python project requiring Python 3.12 or newer.
-- Added pytest 9.1.1 to the `dev` dependency group and generated `uv.lock`.
-- Created the importable `docs_action_agent` package under `src/` with no application behavior.
-- Wrote a package-import smoke test and confirmed pytest discovery.
-- Documented the locked setup, Python-version check, and test command in `README.md`.
+- Classified valid, missing, and malformed question payloads; corrected the distinction between redirect and client-error HTTP categories.
+- Explained why validation belongs at the HTTP boundary: reject bad data early and prevent wasted or unsafe downstream work.
+- Added Pydantic 2.13.5 as a locked runtime dependency.
+- Defined provider-independent `QuestionRequest` and `QuestionResponse` models with an explicit `answered`/`abstained` status.
+- Rejected missing, non-string, empty, whitespace-only, and unsupported-status input through model validation tests.
+- Generated the request JSON Schema and confirmed that the question is required with a minimum length of one.
+- Added the exact Pydantic and pytest sections needed after the implementation diagnostic exposed a resource gap.
 
 ## Blocked or pending decisions
 
@@ -23,7 +24,7 @@
 
 ## Next action
 
-Begin the Session 3 card in `docs/SPRINT.md`. Sasha should classify valid, missing, and malformed request payloads, explain why validation belongs at the HTTP boundary, and then draft provider-independent Pydantic request/result models. Do not add routes, provider calls, or retrieval fields.
+Begin the Session 4 card in `docs/SPRINT.md`. Sasha should explain the provider/application boundary and identify which tests need no network, then define the smallest provider protocol and deterministic fake before considering one hosted adapter or live call.
 
 ## Validation state
 
@@ -38,11 +39,15 @@ Begin the Session 3 card in `docs/SPRINT.md`. Sasha should classify valid, missi
 | Local Git repository | Passing | Initialized on `main` on 2026-09-23 |
 | Session 1 artifact commit | Passing | `409ec75` |
 | Session 2 artifact commit | Passing | `03239ae` |
+| Session 3 typed model contract | Passing | Request/result models contain no provider-specific or retrieval fields |
+| Session 3 model validation | Passing | Seven focused model tests cover valid, missing, malformed, blank, serialization, and status cases |
+| Session 3 JSON Schema | Passing | `QuestionRequest` requires a string with `minLength: 1` |
+| Session 3 artifact commit | Passing | `da1119e` |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
-| Locked environment resolution | Passing | `uv sync --locked` resolved 7 packages on 2026-09-24 |
-| Package import and pytest discovery | Passing | `uv run pytest -q` returned `1 passed in 0.00s` |
-| Application behavior | Not applicable | Session 2 intentionally added no product behavior |
+| Locked environment resolution | Passing | `uv sync --locked` resolved 12 package records and checked 11 packages on 2026-09-25 |
+| Package import and pytest discovery | Passing | `uv run pytest -q` returned `8 passed in 0.03s` |
+| Application behavior | Passing for current scope | Typed validation and serialization only; routes and provider behavior remain intentionally absent |
 | Live provider call | Not run | Deliberately excluded from bootstrap |
 
 ## Current validation commands
