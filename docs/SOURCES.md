@@ -9,6 +9,7 @@ The capstone is the primary curriculum. Use these resources only where a session
 | Exact section | Scheduled use |
 |---|---|
 | FastAPI tutorial, [`Request Body`](https://fastapi.tiangolo.com/tutorial/body/) and [`Response Model`](https://fastapi.tiangolo.com/tutorial/response-model/) | Session 3: HTTP-boundary validation, generated JSON Schema, and typed response contracts |
+| FastAPI tutorial, [`First Steps`](https://fastapi.tiangolo.com/tutorial/first-steps/), [`Dependencies`](https://fastapi.tiangolo.com/tutorial/dependencies/), [`Handling Errors`](https://fastapi.tiangolo.com/tutorial/handling-errors/), and [`Testing`](https://fastapi.tiangolo.com/tutorial/testing/) | Session 5: route construction, provider injection, controlled HTTP error mapping, and offline ASGI tests after the diagnostic exposed gaps in boundary ownership and failure responses |
 | Pydantic [`Models`](https://docs.pydantic.dev/latest/concepts/models/) — `Basic model usage` and `Error handling` | Session 3: required fields, `ValidationError`, constrained strings, and `model_dump()` after the diagnostic exposed a hands-on gap |
 | pytest [`Get Started`](https://docs.pytest.org/en/stable/getting-started.html) — `Create your first test` and `Assert that a certain exception is raised` | Session 3: test discovery, plain assertions, and `pytest.raises()` after the diagnostic exposed a hands-on gap |
 

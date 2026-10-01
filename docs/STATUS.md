@@ -1,30 +1,30 @@
 # Current Status
 
 **Last updated:** 2026-09-30
-**Sprint state:** Session 4 complete; provider seam, deterministic fake, and environment settings established
+**Sprint state:** Session 5 complete; offline FastAPI vertical slice and failure mapping established
 **Current sprint gate:** Week 1 — application foundations and vertical slice
-**Current session:** Session 4 — provider seam and structured generation complete
-**Next planned session:** Session 5 — FastAPI vertical slice (originally scheduled 2026-09-27, 90 minutes)
+**Current session:** Session 5 — FastAPI vertical slice complete
+**Next planned session:** Session 6 — container and baseline assumptions (originally scheduled 2026-09-28, 20 minutes)
 
-## Completed in Session 4
+## Completed in Session 5
 
-- Explained the provider-adapter/application boundary, why application-owned failures cross it, and why usage metadata is distinct from user telemetry.
-- Defined an application-owned async `TextProvider` protocol with typed `ProviderResult` and token-usage models.
-- Added application-owned `ProviderError` and `ProviderTimeout` exceptions so provider-specific failures cannot leak inward.
-- Implemented a deterministic `FakeTextProvider` that returns a configured result or raises a configured controlled error without network access.
-- Added environment-based typed settings using `SecretStr`, committed placeholder names in `.env.example`, and ignored the real `.env` file.
-- Added offline success, timeout, configured-settings, and missing-settings tests; the full suite passes with 12 tests.
-- Deferred the optional hosted adapter and live call because no provider/model or credential has been selected; no acceptance criterion depends on them.
+- Corrected the request direction from HTTP transport into the application use case and provider boundary; distinguished liveness from readiness.
+- Added an async `generate_question` use case with no FastAPI or HTTP dependencies.
+- Added `GET /health` and typed `POST /questions` routes with `TextProvider` supplied through FastAPI dependency injection.
+- Mapped the controlled `ProviderTimeout` failure to a stable, non-leaky `504` response while leaving unexpected failures to the framework's generic `500` handling.
+- Added offline ASGI tests for health, successful generation, missing/malformed/blank inputs, provider timeout, and non-leaky unexpected exceptions.
+- Replaced the deprecated test-client dependency path with the installed Starlette version's supported `httpx2` test transport.
+- Verified the complete suite with 20 passing tests and confirmed the live `/health` response through Uvicorn and `curl`.
 
 ## Blocked or pending decisions
 
 - **Required before corpus ingestion:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule by 2026-10-06, before Session 15.
 - **Optional repository publication:** no GitHub repository or remote exists; decide public versus private before publication.
-- Hosted model provider and model name can remain undecided until the Week 1 vertical slice; do not commit a credential.
+- Hosted model provider and model name remain unselected; choose them only before a scheduled hosted-adapter or evaluation requirement, and provide credentials at runtime rather than committing them.
 
 ## Next action
 
-Begin the Session 5 card in `docs/SPRINT.md`. Sasha should trace the request lifecycle and classify validation, provider-timeout, and unexpected failures before implementing the FastAPI route and application use case against `TextProvider`.
+Begin the Session 6 card in `docs/SPRINT.md`. Sasha should explain which files enter a container image, which configuration values arrive only at runtime, and why `.env` must not enter the build context before drafting the minimal container and baseline threat assumptions.
 
 ## Validation state
 
@@ -47,11 +47,18 @@ Begin the Session 5 card in `docs/SPRINT.md`. Sasha should trace the request lif
 | Session 4 deterministic fake | Passing | Success and timeout paths covered without network access |
 | Session 4 environment settings | Passing | Required values load explicitly from the environment; `SecretStr` protects display and missing configuration fails fast |
 | Session 4 secret hygiene | Passing | `.env` ignored; `.env.example` contains empty placeholders; broad scan reviewed with only documented false positives and no credential value |
+| Session 4 artifact commit | Passing | `109ddfb` |
+| Session 5 request path | Passing | FastAPI transport calls an application use case, which awaits an injected application-owned provider protocol |
+| Session 5 HTTP validation | Passing | Missing, empty, whitespace-only, and non-string questions return `422` before provider execution |
+| Session 5 failure mapping | Passing | Provider timeout returns stable `504`; unexpected exception returns generic `500` without its internal message |
+| Session 5 offline API tests | Passing | Health, success, validation, controlled failure, and unexpected failure covered without network or paid provider calls |
+| Session 5 live health check | Passing | Uvicorn started on `127.0.0.1:8000`; `curl -fsS http://127.0.0.1:8000/health` returned `{"status":"ok"}` with HTTP 200 |
+| Session 5 artifact commit | Passing | `3f8f172` |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
-| Locked environment resolution | Passing | `uv sync --locked` resolved 12 package records and checked 11 packages on 2026-09-30 |
-| Package import and pytest discovery | Passing | `uv run pytest -q` returned `12 passed in 0.05s` |
-| Application behavior | Passing for current scope | Typed HTTP models and provider seam exist; routes and the application use case remain intentionally absent until Session 5 |
+| Locked environment resolution | Passing | `uv sync --locked` completed against the Session 5 lockfile on 2026-09-30 |
+| Package import and pytest discovery | Passing | `uv run pytest -q` returned `20 passed in 0.18s` |
+| Application behavior | Passing for current scope | Typed `/questions` vertical slice and `/health` liveness route work with a deterministic injected fake |
 | Live provider call | Deferred | Optional in Session 4; no provider/model or credential selected, and ordinary tests remain offline |
 
 ## Current validation commands
@@ -62,6 +69,10 @@ Run the project checks followed by the documentation checks:
 uv sync --locked
 uv run python --version
 uv run pytest -q
+# In one terminal:
+uv run uvicorn docs_action_agent.api:app --host 127.0.0.1 --port 8000
+# In another terminal:
+curl -fsS http://127.0.0.1:8000/health
 test -f AGENTS.md && test -f README.md
 for file in SPEC SPRINT STATUS DECISIONS EVIDENCE SOURCES; do test -f "docs/${file}.md"; done
 test "$(grep -c '^### Session [0-9]' docs/SPRINT.md)" -eq 42

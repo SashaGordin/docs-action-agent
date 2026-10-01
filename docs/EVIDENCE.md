@@ -62,7 +62,7 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | Concept explanation | [Status](STATUS.md) | Sasha distinguished adapter/application responsibilities, provider usage from application telemetry, raised failures from returned success values, and explicit from import-time settings loading |
 | Validation | [Status](STATUS.md#validation-state) | Locked sync passed; provider/settings imports passed; `12 passed in 0.05s`; `git diff --check` passed; secret scan reviewed with no credential value |
 | Hosted adapter/live call | — | Intentionally deferred: optional for Session 4 and no provider/model or credential selected |
-| Session artifact commit | — | Pending final review/commit |
+| Session artifact commit | `109ddfb` | `Build Session 4 provider seam` |
 
 Provider boundary recorded during the session:
 
@@ -76,6 +76,35 @@ FakeTextProvider       future hosted adapter
           \               /
            ProviderResult
           or ProviderError
+```
+
+## 2026-09-30 — Session 5 FastAPI vertical slice
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Application use case | [`usecase.py`](../src/docs_action_agent/usecase.py) | Async provider orchestration remains independent of FastAPI and HTTP status codes |
+| FastAPI transport | [`api.py`](../src/docs_action_agent/api.py) | Typed question route and liveness route call inward through the application boundary |
+| Dependency injection | [`get_provider`](../src/docs_action_agent/api.py) | Deterministic fake is supplied behind `TextProvider`; tests replace it through FastAPI dependency overrides |
+| API behavior tests | [`test_api.py`](../tests/test_api.py) | Success, four invalid payloads, provider timeout, unexpected exception, and health covered offline |
+| Controlled failure response | [`test_timeout_questions_endpoint`](../tests/test_api.py) | `ProviderTimeout` becomes HTTP 504 with a stable message rather than leaking provider details |
+| Unexpected failure response | [`test_unexpected_failure_provider`](../tests/test_api.py) | Runtime error becomes generic HTTP 500 and its internal message is absent from the response |
+| Validation | [Status](STATUS.md#validation-state) | `20 passed in 0.18s`; locked sync and documentation checks passed; `git diff --check` passed |
+| Live health check | [README command](../README.md#development-setup) | Uvicorn startup succeeded; `curl -fsS http://127.0.0.1:8000/health` returned `{"status":"ok"}` with HTTP 200 |
+| Session artifact commit | `3f8f172` | `Build Session 5 FastAPI vertical slice` |
+
+Request path explained and implemented during the session:
+
+```text
+HTTP client
+  -> FastAPI route and QuestionRequest validation
+  -> generate_question application use case
+  -> injected TextProvider
+  -> deterministic FakeTextProvider
+  -> QuestionResponse serialized by FastAPI
+
+Invalid input stops at validation (422).
+ProviderTimeout crosses the application boundary and is mapped at HTTP (504).
+Unexpected exceptions remain generic, non-leaky server failures (500).
 ```
 
 ## Planned weekly evidence
