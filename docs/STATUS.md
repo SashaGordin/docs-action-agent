@@ -1,20 +1,20 @@
 # Current Status
 
-**Last updated:** 2026-09-25
-**Sprint state:** Session 3 complete; typed request/response contract established
-**Current week:** Week 1 — application foundations and vertical slice  
-**Current session:** Session 3 — typed HTTP boundary complete
-**Next scheduled session:** Session 4 — 2026-09-26, 3 hours
+**Last updated:** 2026-09-30
+**Sprint state:** Session 4 complete; provider seam, deterministic fake, and environment settings established
+**Current sprint gate:** Week 1 — application foundations and vertical slice
+**Current session:** Session 4 — provider seam and structured generation complete
+**Next planned session:** Session 5 — FastAPI vertical slice (originally scheduled 2026-09-27, 90 minutes)
 
-## Completed in Session 3
+## Completed in Session 4
 
-- Classified valid, missing, and malformed question payloads; corrected the distinction between redirect and client-error HTTP categories.
-- Explained why validation belongs at the HTTP boundary: reject bad data early and prevent wasted or unsafe downstream work.
-- Added Pydantic 2.13.5 as a locked runtime dependency.
-- Defined provider-independent `QuestionRequest` and `QuestionResponse` models with an explicit `answered`/`abstained` status.
-- Rejected missing, non-string, empty, whitespace-only, and unsupported-status input through model validation tests.
-- Generated the request JSON Schema and confirmed that the question is required with a minimum length of one.
-- Added the exact Pydantic and pytest sections needed after the implementation diagnostic exposed a resource gap.
+- Explained the provider-adapter/application boundary, why application-owned failures cross it, and why usage metadata is distinct from user telemetry.
+- Defined an application-owned async `TextProvider` protocol with typed `ProviderResult` and token-usage models.
+- Added application-owned `ProviderError` and `ProviderTimeout` exceptions so provider-specific failures cannot leak inward.
+- Implemented a deterministic `FakeTextProvider` that returns a configured result or raises a configured controlled error without network access.
+- Added environment-based typed settings using `SecretStr`, committed placeholder names in `.env.example`, and ignored the real `.env` file.
+- Added offline success, timeout, configured-settings, and missing-settings tests; the full suite passes with 12 tests.
+- Deferred the optional hosted adapter and live call because no provider/model or credential has been selected; no acceptance criterion depends on them.
 
 ## Blocked or pending decisions
 
@@ -24,7 +24,7 @@
 
 ## Next action
 
-Begin the Session 4 card in `docs/SPRINT.md`. Sasha should explain the provider/application boundary and identify which tests need no network, then define the smallest provider protocol and deterministic fake before considering one hosted adapter or live call.
+Begin the Session 5 card in `docs/SPRINT.md`. Sasha should trace the request lifecycle and classify validation, provider-timeout, and unexpected failures before implementing the FastAPI route and application use case against `TextProvider`.
 
 ## Validation state
 
@@ -43,12 +43,16 @@ Begin the Session 4 card in `docs/SPRINT.md`. Sasha should explain the provider/
 | Session 3 model validation | Passing | Seven focused model tests cover valid, missing, malformed, blank, serialization, and status cases |
 | Session 3 JSON Schema | Passing | `QuestionRequest` requires a string with `minLength: 1` |
 | Session 3 artifact commit | Passing | `da1119e` |
+| Session 4 provider boundary | Passing | Async application-owned protocol returns typed output or raises controlled application-owned errors |
+| Session 4 deterministic fake | Passing | Success and timeout paths covered without network access |
+| Session 4 environment settings | Passing | Required values load explicitly from the environment; `SecretStr` protects display and missing configuration fails fast |
+| Session 4 secret hygiene | Passing | `.env` ignored; `.env.example` contains empty placeholders; broad scan reviewed with only documented false positives and no credential value |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
-| Locked environment resolution | Passing | `uv sync --locked` resolved 12 package records and checked 11 packages on 2026-09-25 |
-| Package import and pytest discovery | Passing | `uv run pytest -q` returned `8 passed in 0.03s` |
-| Application behavior | Passing for current scope | Typed validation and serialization only; routes and provider behavior remain intentionally absent |
-| Live provider call | Not run | Deliberately excluded from bootstrap |
+| Locked environment resolution | Passing | `uv sync --locked` resolved 12 package records and checked 11 packages on 2026-09-30 |
+| Package import and pytest discovery | Passing | `uv run pytest -q` returned `12 passed in 0.05s` |
+| Application behavior | Passing for current scope | Typed HTTP models and provider seam exist; routes and the application use case remain intentionally absent until Session 5 |
+| Live provider call | Deferred | Optional in Session 4; no provider/model or credential selected, and ordinary tests remain offline |
 
 ## Current validation commands
 

@@ -49,6 +49,35 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | Validation | [Status](STATUS.md#validation-state) | Locked sync passed; Python 3.12.14; `8 passed in 0.03s`; model import and schema generation passed |
 | Session artifact commit | `da1119e` | `Define Session 3 typed API contract` |
 
+## 2026-09-30 — Session 4 provider seam and structured generation
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Application-owned provider boundary | [`src/docs_action_agent/provider.py`](../src/docs_action_agent/provider.py) | Async `TextProvider` protocol exposes one structured generation operation with no vendor SDK types |
+| Structured provider output | [`ProviderResult` and `ProviderUsage`](../src/docs_action_agent/provider.py) | Answer plus input/output token usage represented by Pydantic models |
+| Controlled failures | [`ProviderError` and `ProviderTimeout`](../src/docs_action_agent/provider.py) | Timeout crosses the boundary as an application-owned raised exception rather than a provider SDK error or success value |
+| Deterministic fake tests | [`tests/test_provider.py`](../tests/test_provider.py) | Configured success and timeout paths pass with no network access |
+| Environment-based settings | [`settings.py`](../src/docs_action_agent/settings.py) and [`.env.example`](../.env.example) | Required API key/model name load explicitly; secret uses `SecretStr`; real `.env` is ignored |
+| Settings tests | [`tests/test_settings.py`](../tests/test_settings.py) | Controlled environment loads successfully and missing API key fails fast; no real credential used |
+| Concept explanation | [Status](STATUS.md) | Sasha distinguished adapter/application responsibilities, provider usage from application telemetry, raised failures from returned success values, and explicit from import-time settings loading |
+| Validation | [Status](STATUS.md#validation-state) | Locked sync passed; provider/settings imports passed; `12 passed in 0.05s`; `git diff --check` passed; secret scan reviewed with no credential value |
+| Hosted adapter/live call | — | Intentionally deferred: optional for Session 4 and no provider/model or credential selected |
+| Session artifact commit | — | Pending final review/commit |
+
+Provider boundary recorded during the session:
+
+```text
+Future application use case (Session 5)
+                |
+                v
+         TextProvider protocol
+          /               \
+FakeTextProvider       future hosted adapter
+          \               /
+           ProviderResult
+          or ProviderError
+```
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |
