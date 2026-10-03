@@ -107,6 +107,37 @@ ProviderTimeout crosses the application boundary and is mapped at HTTP (504).
 Unexpected exceptions remain generic, non-leaky server failures (500).
 ```
 
+## 2026-10-02 — Session 6 container and baseline assumptions
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Container definition | [`Dockerfile`](../Dockerfile) | Python 3.12 slim image; pinned uv executable; two-phase locked runtime sync; noninteractive Uvicorn startup |
+| Build-context boundary | [`.dockerignore`](../.dockerignore) | Excludes `.env`, host `.venv`, Git history, tests, documentation, bytecode, and local caches |
+| Baseline threat assumptions | [Threat model](THREAT_MODEL.md) | Separates untrusted input, untrusted model output, and credentials; records current controls and residual limitations |
+| Concept explanation | [Threat model](THREAT_MODEL.md#baseline-assumptions) | Sasha explained runtime-only secrets and liveness limits, then corrected image composition, dependency-layer caching, bind versus probe addresses, and structure-versus-content trust |
+| Image build | [`Dockerfile`](../Dockerfile) | `docker build -t docs-action-agent:dev .` passed; image ID began `a75ec1f3a2a9` |
+| Container smoke check | [README container commands](../README.md#container-setup) | Temporary container started; `GET /health` returned `{"status":"ok"}`; Docker reported `running healthy`; container was stopped and removed |
+| Resource substitution | [Sources](SOURCES.md#docker-and-uv-primary-documentation) | Inaccessible paid material replaced by exact free official Docker and uv sections |
+| Session artifact commit | `0975698` | `Add Session 6 container baseline` |
+| Daily score | — | 5/5: Recall, Build, Verify, Explain, and Record completed; planned 20 minutes, actual 2 hours |
+
+Daily log:
+
+```text
+Date / planned time / actual time: 2026-10-02 / 20 minutes / 2 hours
+Today's workstream and agent-architecture layer: Capstone / production-operation container and trust boundaries
+Recall before notes: Partially correct image contents, runtime-secret rationale, and liveness limits; gaps in host environment exclusion and runtime configuration
+Artifact or observation produced: Dockerfile, .dockerignore, baseline threat model, container README path, and free primary-source substitution
+Verification and result: 20 offline tests passed; locked sync passed; image built; /health returned {"status":"ok"}; Docker reported running healthy; excluded paths absent from image
+What I can now explain: Image versus container, build context, two-phase uv sync, runtime configuration, bind versus probe addresses, health limits, and typed structure versus trusted content
+Failure, uncertainty, or limitation: Paid material was inaccessible; initial cached-build instructions omitted --no-install-project and the second sync; no maximum question length or production secret manager exists
+Score (Recall / Build-observe / Verify / Explain / Record): 5 / 5
+Actual hours this week / planned hours: 2 hours / 5 hours 30 minutes
+Call-critical gates complete / remaining: 1 / 8
+Estimated remaining hours / planned capacity remaining: 34 hours 45 minutes / 34 hours 45 minutes; reforecast Sunday
+Next smallest step: Run the Session 7 Week 1 evidence gate and closed-notes whole-slice explanation
+```
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |

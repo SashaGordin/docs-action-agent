@@ -1,22 +1,21 @@
 # Current Status
 
-**Last updated:** 2026-09-30
-**Sprint state:** Session 5 complete; offline FastAPI vertical slice and failure mapping established
+**Last updated:** 2026-10-02
+**Sprint state:** Session 6 complete; container and baseline threat assumptions verified
 **Current sprint gate:** Week 1 — application foundations and vertical slice
-**Current session:** Session 5 — FastAPI vertical slice complete
-**Next planned session:** Session 6 — container and baseline assumptions (originally scheduled 2026-09-28, 20 minutes)
+**Current session:** Session 6 — container and baseline assumptions complete
+**Next planned session:** Session 7 — Week 1 evidence gate (October 3 readiness-plan block)
 
 **October 26 scheduling overlay:** The local [Stephen Anthony readiness plan](OCTOBER_26_READINESS.md) now governs call-critical sequencing, weekly capacity, catch-up decisions, and the protected October 22–25 review window. Sasha may say `Start the next session` to advance the agent-architecture capstone track; FDE and Riser are separate self-directed tracks. Available time is optional unless it differs from the current card or calendar timebox.
 
-## Completed in Session 5
+## Completed in Session 6
 
-- Corrected the request direction from HTTP transport into the application use case and provider boundary; distinguished liveness from readiness.
-- Added an async `generate_question` use case with no FastAPI or HTTP dependencies.
-- Added `GET /health` and typed `POST /questions` routes with `TextProvider` supplied through FastAPI dependency injection.
-- Mapped the controlled `ProviderTimeout` failure to a stable, non-leaky `504` response while leaving unexpected failures to the framework's generic `500` handling.
-- Added offline ASGI tests for health, successful generation, missing/malformed/blank inputs, provider timeout, and non-leaky unexpected exceptions.
-- Replaced the deprecated test-client dependency path with the installed Starlette version's supported `httpx2` test transport.
-- Verified the complete suite with 20 passing tests and confirmed the live `/health` response through Uvicorn and `curl`.
+- Distinguished an immutable image from a running container, the build context from image contents, and a server bind address from a probe destination.
+- Added a Python 3.12 Docker image with a pinned uv executable, cached locked runtime dependencies, application source, noninteractive Uvicorn startup, and a liveness probe.
+- Added `.dockerignore` exclusions for credentials, the host virtual environment, Git history, tests, documentation, bytecode, and caches.
+- Replaced inaccessible paid Session 6 material with exact free official Docker and uv documentation sections.
+- Recorded baseline threats for untrusted user input, untrusted model output, and credentials, including current controls and residual limitations.
+- Built `docs-action-agent:dev`, started a temporary container, received `{"status":"ok"}`, observed Docker status `running healthy`, and removed the container.
 
 ## Blocked or pending decisions
 
@@ -26,7 +25,7 @@
 
 ## Next action
 
-Begin the Session 6 card in `docs/SPRINT.md`. Sasha should explain which files enter a container image, which configuration values arrive only at runtime, and why `.env` must not enter the build context before drafting the minimal container and baseline threat assumptions.
+Begin the Session 7 Week 1 evidence gate. Recheck the full slice, container startup, documentation, secret hygiene, and Sasha's architecture explanation without adding later-card features.
 
 ## Validation state
 
@@ -56,10 +55,16 @@ Begin the Session 6 card in `docs/SPRINT.md`. Sasha should explain which files e
 | Session 5 offline API tests | Passing | Health, success, validation, controlled failure, and unexpected failure covered without network or paid provider calls |
 | Session 5 live health check | Passing | Uvicorn started on `127.0.0.1:8000`; `curl -fsS http://127.0.0.1:8000/health` returned `{"status":"ok"}` with HTTP 200 |
 | Session 5 artifact commit | Passing | `3f8f172` |
+| Session 6 container build | Passing | `docker build -t docs-action-agent:dev .`; image ID began `a75ec1f3a2a9` |
+| Session 6 container liveness | Passing | `/health` returned `{"status":"ok"}` and Docker reported `running healthy` |
+| Session 6 build-context secret boundary | Passing | `.env`, host `.venv`, and Git history excluded; image uses explicit `COPY` instructions |
+| Session 6 threat baseline | Passing | `docs/THREAT_MODEL.md` distinguishes untrusted input, model output, and credentials with current controls and residual limitations |
+| Session 6 artifact commit | Passing | `0975698` |
+| Session 6 actual time / daily score | Passing | Planned 20 minutes; actual 2 hours; 5/5 |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
-| Locked environment resolution | Passing | `uv sync --locked` completed against the Session 5 lockfile on 2026-09-30 |
-| Package import and pytest discovery | Passing | `uv run pytest -q` returned `20 passed in 0.18s` |
+| Locked environment resolution | Passing | `uv sync --locked` completed against the lockfile on 2026-10-02 |
+| Package import and pytest discovery | Passing | `uv run pytest -q` returned `20 passed in 0.18s` on 2026-10-02 |
 | Application behavior | Passing for current scope | Typed `/questions` vertical slice and `/health` liveness route work with a deterministic injected fake |
 | Live provider call | Deferred | Optional in Session 4; no provider/model or credential selected, and ordinary tests remain offline |
 
