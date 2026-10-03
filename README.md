@@ -30,6 +30,7 @@ The hosted model sits behind a small provider interface. An OpenAI-compatible lo
 
 - [Product specification](docs/SPEC.md)
 - [Daily six-week sprint](docs/SPRINT.md)
+- [October 26 readiness and session queue](docs/OCTOBER_26_READINESS.md)
 - [Current status](docs/STATUS.md)
 - [Architecture decisions](docs/DECISIONS.md)
 - [Evidence ledger](docs/EVIDENCE.md)

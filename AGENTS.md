@@ -10,6 +10,7 @@ Before every session, read, in order:
 2. the current session card in `docs/SPRINT.md`
 3. applicable accepted and pending records in `docs/DECISIONS.md`
 4. the relevant entries in `docs/SOURCES.md`
+5. through October 26, 2026, the local [October 26 readiness plan](docs/OCTOBER_26_READINESS.md), which controls call-critical sequencing, timeboxes, catch-up rules, and the protected review window
 
 `docs/SPEC.md` defines product scope and the final definition of done. If a request conflicts with it, surface the conflict and record an explicit decision before changing scope.
 
@@ -26,7 +27,7 @@ For each scheduled session:
 7. Run every validation command on the current card. Do not advance while required validation fails.
 8. Update `docs/STATUS.md`, `docs/EVIDENCE.md`, and any affected decision record before ending.
 
-Do not silently implement later session cards. Work only on the current card unless Sasha explicitly asks to continue.
+Do not silently implement later session cards. Work only on the current card unless Sasha explicitly asks to continue. Through October 26, `Start the next session` authorizes the next incomplete **agent-architecture capstone session** identified by the readiness plan; FDE research and Riser exploration start only when Sasha names that track or reaches its calendar block. State any departure from numeric card order before work begins and preserve all applicable acceptance criteria.
 
 ## Scope guardrails
 
@@ -71,4 +72,3 @@ Do not silently implement later session cards. Work only on the current card unl
 - Make focused commits whose messages describe the evidence produced.
 - Do not include a `Co-Authored-By: Codex` line.
 - This directory was not a Git repository at bootstrap time. Initialize Git only when Sasha approves or begins Session 1, then replace evidence placeholders with commit links or hashes.
-

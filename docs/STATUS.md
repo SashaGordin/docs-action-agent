@@ -6,6 +6,8 @@
 **Current session:** Session 5 — FastAPI vertical slice complete
 **Next planned session:** Session 6 — container and baseline assumptions (originally scheduled 2026-09-28, 20 minutes)
 
+**October 26 scheduling overlay:** The local [Stephen Anthony readiness plan](OCTOBER_26_READINESS.md) now governs call-critical sequencing, weekly capacity, catch-up decisions, and the protected October 22–25 review window. Sasha may say `Start the next session` to advance the agent-architecture capstone track; FDE and Riser are separate self-directed tracks. Available time is optional unless it differs from the current card or calendar timebox.
+
 ## Completed in Session 5
 
 - Corrected the request direction from HTTP transport into the application use case and provider boundary; distinguished liveness from readiness.

@@ -4,6 +4,8 @@
 **Budget:** approximately 9 hours per week  
 **Execution rule:** complete only the current card. If time is short, narrow features before tests, evaluation, security, or documentation. Each session ends by updating `STATUS.md` and `EVIDENCE.md`; add an ADR when a decision changes architecture or scope.
 
+**October 26 overlay:** Through the Stephen Anthony follow-up, [OCTOBER_26_READINESS.md](OCTOBER_26_READINESS.md) controls call-critical sequencing, capacity, scope cuts, and the protected October 22–25 review window. The cards below retain their acceptance criteria and remain the full-sprint plan, but their original dates are subordinate to the overlay.
+
 ## Weekly gates
 
 | Week | Dates | Question | Gate |
