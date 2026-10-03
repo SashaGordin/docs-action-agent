@@ -64,3 +64,21 @@ In another terminal, verify liveness with:
 ```bash
 curl -fsS http://127.0.0.1:8000/health
 ```
+
+## Container setup
+
+Build the local development image from the locked runtime dependencies:
+
+```bash
+docker build -t docs-action-agent:dev .
+```
+
+Start it on local port 8000:
+
+```bash
+docker run --rm --name docs-action-agent -p 8000:8000 docs-action-agent:dev
+```
+
+In another terminal, run the same `/health` command above. The endpoint and Docker
+health check prove HTTP liveness only; they do not prove provider or workflow
+readiness. The current fake-provider application requires no runtime credential.

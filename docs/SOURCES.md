@@ -13,6 +13,14 @@ The capstone is the primary curriculum. Use these resources only where a session
 | Pydantic [`Models`](https://docs.pydantic.dev/latest/concepts/models/) — `Basic model usage` and `Error handling` | Session 3: required fields, `ValidationError`, constrained strings, and `model_dump()` after the diagnostic exposed a hands-on gap |
 | pytest [`Get Started`](https://docs.pytest.org/en/stable/getting-started.html) — `Create your first test` and `Assert that a certain exception is raised` | Session 3: test discovery, plain assertions, and `pytest.raises()` after the diagnostic exposed a hands-on gap |
 
+### Docker and uv primary documentation
+
+| Exact section | Scheduled use |
+|---|---|
+| Docker Build [`Build context`](https://docs.docker.com/build/concepts/context/) — `.dockerignore files` | Session 6: keep secrets, the host virtual environment, Git metadata, caches, tests, and documentation out of the runtime-image build context |
+| uv [`Using uv in Docker`](https://docs.astral.sh/uv/guides/integration/docker/) — `Installing uv` and `Installing a project` | Session 6: create the image environment from the lockfile instead of copying the host `.venv` |
+| Docker [`Dockerfile reference`](https://docs.docker.com/reference/dockerfile/) — only `FROM`, `WORKDIR`, `COPY`, `CMD`, and `HEALTHCHECK` | Session 6: instruction lookup while drafting the minimal application image and liveness probe |
+
 ### Roadmap.sh checklists
 
 - [AI Engineer roadmap](https://roadmap.sh/ai-engineer) and [PDF](https://roadmap.sh/pdfs/roadmaps/ai-engineer.pdf): Session 1 gap matrix; revisit only the current week's nodes for model APIs, structured outputs, agents/tools, embeddings/vector search/RAG, local models, evaluation, and prompt-injection defenses.
@@ -55,7 +63,7 @@ Repository: [jamwithai/production-agentic-rag-course](https://github.com/jamwith
 
 | Exact course area | Scheduled use |
 |---|---|
-| Week 1 — FastAPI/Docker health-check and service-boundary patterns only | Sessions 5–6 and 29–31 |
+| Week 1 — FastAPI/Docker health-check and service-boundary patterns only | Optional supplementary material for Sessions 5–6 and 29–31 when Sasha already has access; the free primary Docker and uv documentation above is the Session 6 assignment |
 | Week 2 — ingestion retries, PDF/metadata patterns (adapt concepts to Markdown/HTML; no Airflow) | Sessions 15–16 |
 | Week 3 — BM25, mappings/query concepts, filtering, relevance metrics | Sessions 16–18 |
 | Week 4 — section-aware chunking, embeddings, hybrid retrieval/RRF | Sessions 18–20 |
