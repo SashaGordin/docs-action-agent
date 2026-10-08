@@ -165,14 +165,14 @@ These blocks are also on the connected Google Calendar. Exact dates guide capaci
 | Date | Time | Outcome | Completion condition |
 |---|---:|---|---|
 | Fri Oct 2 | 30 min | Rebaseline | Confirm status/backlog and explain the current request path. |
-| Sat Oct 3 | 3 hr | Week 1 gate | Finish container/threat baseline; verify tests, startup, and architecture explanation. |
+| Sat Oct 3 | 3 hr | Agent/workflow design | Classify deterministic and model-directed behavior; define the two tools, limits, retry policy, and terminal states. Sasha explicitly deferred the repeated foundation review until the agent loop exists. |
 | Sun Oct 4 | 2 hr | Riser exploration 1 | Complete onboarding, configure a first bounded agent from public material, and record observations under worked, confused, customer need, and possible gap. |
 | Mon Oct 5 | 30 min | FDE orientation | Define the role, distinguish it from software engineering, solutions engineering, account work, and product management, and start a role-and-fit research note. |
-| Tue Oct 6 | 75 min | Agent/workflow design | Classify deterministic/model steps and define tools, limits, timeout, and terminal states. |
-| Wed Oct 7 | 90 min | First read-only tool | Implement and test one bounded typed tool. |
+| Tue Oct 6 | 75 min | First read-only tool contract | Completed early on Oct 5 as part of a combined three-hour block: typed `evidence_search` boundary implemented and tested; second tool not added. |
+| Wed Oct 7 | 90 min | First read-only tool | Completed early on Oct 5 in the same block: bounded fixture-backed implementation and safe raw-argument boundary verified. |
 | Thu Oct 8 | 90 min | Second tool and allowlist | Implement tool two and prove unknown/unauthorized calls fail closed. |
 | Fri Oct 9 | 30 min | Recall checkpoint | Explain tools, tokens/context, loops, validation, and deterministic boundaries without notes. |
-| Sat Oct 10 | 3 hr | Explicit tool loop | Complete the validated loop, preserve plan/reusable-context/review/correction evidence, and run one controlled live interaction if configured. |
+| Sat Oct 10 | 3 hr | Explicit tool loop and foundation gate | Complete the validated loop; re-run the deferred start/test/container checks; preserve plan/reusable-context/review/correction evidence; and run one controlled live interaction if configured. |
 | Sun Oct 11 | 90 min | Corpus contract | Pin the corpus and define paths, metadata, attribution, IDs, and reproducible inputs. |
 | Mon Oct 12 | 1 hr | FDE research | Study representative responsibilities, working style, customer/engineering interface, success measures, common strengths, and likely personal fit/gaps. Record sources and conclusions rather than collecting job descriptions. |
 | Tue Oct 13 | 75 min | Ingestion and eval set | Produce deterministic chunks and answerable, misleading, and unanswerable cases. |

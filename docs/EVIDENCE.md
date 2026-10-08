@@ -138,6 +138,74 @@ Estimated remaining hours / planned capacity remaining: 34 hours 45 minutes / 34
 Next smallest step: Run the Session 7 Week 1 evidence gate and closed-notes whole-slice explanation
 ```
 
+## 2026-10-03 — Restructured Session 7 agent/workflow design
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Agent-versus-workflow decision | [ADR-007](DECISIONS.md#adr-007--bounded-model-directed-tool-selection) | Model may select between two read-only tools; execution authority and safety controls remain deterministic |
+| Explicit loop and budgets | [Bounded agent loop](AGENT_LOOP.md) | Three tool calls, four iterations, per-tool and provider timeouts, two-minute deadline, and one budget-counting transient retry recorded |
+| Classification exercise | [Operation ownership](AGENT_LOOP.md#operation-ownership) | Validation, retrieval ranking, and approval classified as deterministic; tool selection and answer generation classified separately |
+| Concept explanation | [Why the model selects tools](AGENT_LOOP.md#why-the-model-selects-tools) | Sasha identified avoided unnecessary calls as the benefit and nondeterminism, diagnostic complexity, and attack surface as costs |
+| Schedule decision | [Readiness plan](OCTOBER_26_READINESS.md#calendar-and-completion-queue) | Repeated foundation review deferred into the October 10 explicit-loop gate; it was not marked complete |
+| Documentation validation | [Status](STATUS.md#validation-state) | Required files and all 42 session-card fields present; learning-state check and `git diff --check` passed |
+
+## 2026-10-05 — First read-only tool contract and implementation
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Typed tool boundary | [`tools.py`](../src/docs_action_agent/tools.py) | Arguments, results, hits, URLs, scores, output count, and stable errors are bounded and reject extra fields |
+| Deterministic placeholder search | [`evidence_search`](../src/docs_action_agent/tools.py) | Three controlled records; token-overlap ranking; chunk-ID tie-breaker; zero-score filtering; no network, filesystem, model, or external write |
+| Safe raw-argument boundary | [`execute_evidence_search`](../src/docs_action_agent/tools.py) | Invalid raw arguments return `invalid_arguments` without exposing the raw payload or Pydantic details |
+| Focused behavior tests | [`test_tools.py`](../tests/test_tools.py) | 32 passed; covers validation, matching, ranking, limit, empty result, determinism, malicious text as data, and safe error mapping |
+| Full regression suite | [Status](STATUS.md#validation-state) | 52 passed in 0.14 seconds |
+| Failure caught during development | [`test_tools.py`](../tests/test_tools.py) | Existing tests initially passed while the uncalled search function crashed; added direct behavior tests and corrected dictionary-to-model construction |
+
+Daily log:
+
+```text
+Date / planned time / actual time: 2026-10-05 / 2 hours 45 minutes combined / 3 hours
+Today's workstream and agent-architecture layer: Capstone / typed tool contract, trust boundary, and deterministic retrieval placeholder
+Recall before notes: No initial tool-contract baseline; learned schema bounds, inert data versus execution, application-owned errors, and output validation from the assigned Lesson 04/06 material and guided implementation
+Artifact or observation produced: Typed evidence_search arguments/results/errors, controlled fixtures, deterministic search, raw-argument execution boundary, and focused tests
+Verification and result: 32 focused tests passed; 52 full-suite tests passed; git diff --check passed
+What I can now explain: Models propose calls but application code validates and authorizes them; malicious-looking text is safe here because it is treated as data by a read-only capability; tests only prove exercised paths
+Failure, uncertainty, or limitation: Old tests passed while the uncalled search crashed; raw overlap also matched a common word, showing why this placeholder is not a measured retrieval implementation
+Score (Recall / Build-observe / Verify / Explain / Record): 5 / 5
+Actual hours this week / planned hours: 3 hours / 9 hours 45 minutes
+Call-critical gates complete / remaining: 1 / 8; bounded tools and loop gate remains in progress
+Estimated remaining hours / planned capacity remaining: Reforecast required after the second-tool/loop gate / 30 hours 45 minutes scheduled after October 5
+Next smallest step: Implement source_lookup and an explicit two-tool allowlist; prove unknown tool names fail closed
+```
+
+## 2026-10-07 — Second read-only tool and executable allowlist
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Exact lookup contract | [`SourceLookupArguments` and `SourceLookupResult`](../src/docs_action_agent/tools.py) | One bounded chunk ID selects one bounded controlled record; extra fields are forbidden |
+| Distinct tool responsibilities | [`evidence_search` and `source_lookup`](../src/docs_action_agent/tools.py) | Search returns ranked previews across records; lookup returns full content for one already-known ID |
+| Safe raw-argument boundary | [`execute_source_lookup`](../src/docs_action_agent/tools.py) | Invalid raw arguments become non-retryable `invalid_arguments`; absent valid IDs become `not_found` |
+| Executable allowlist | [`execute_tool`](../src/docs_action_agent/tools.py) | Exactly two registered executors; unknown `delete_repository` request returns `tool_not_allowed` without dynamic lookup |
+| Focused behavior tests | [`test_tools.py`](../tests/test_tools.py) | 44 passed in 0.06 seconds, including allowed dispatch, invalid lookup arguments, deterministic lookup, exact registry names, and unknown-tool denial |
+| Full regression suite | [Status](STATUS.md#validation-state) | 64 passed in 0.17 seconds; `git diff --check` passed |
+| Failure caught during development | [`test_tools.py`](../tests/test_tools.py) | Tests caught dispatch through the stored name string instead of the stored executor and an invalid test that constructed a typed model before the raw boundary |
+
+Daily log:
+
+```text
+Date / planned time / actual time: 2026-10-07 / 90 minutes / 2 hours
+Today's workstream and agent-architecture layer: Capstone / bounded tool capabilities, validation, and deterministic authorization
+Recall before notes: Correctly distinguished broad evidence discovery from exact source lookup; needed guidance on fixture provenance, exact lookup inputs, and unknown tool names
+Artifact or observation produced: Typed source_lookup contract, bounded full fixture content, safe raw-argument executor, explicit two-tool registry, generic dispatcher, and denial tests
+Verification and result: 44 focused tests passed; 64 full-suite tests passed; git diff --check passed
+What I can now explain: Search returns small ranked previews; lookup retrieves one full controlled record by an ID produced by search; application-owned registry membership grants execution authority, not model output
+Failure, uncertainty, or limitation: Three static hand-authored fixtures prove the boundary but not corpus coverage, realistic chunking, scaling, retrieval quality, or useful grounded answers
+Score (Recall / Build-observe / Verify / Explain / Record): 5 / 5
+Actual hours this week / planned hours: 5 hours / 9 hours 45 minutes
+Call-critical gates complete / remaining: 1 / 8; bounded-tools portion complete and explicit-loop portion remains open
+Estimated remaining hours / planned capacity remaining: Reforecast after the October 10 explicit-loop gate
+Next smallest step: Complete the closed-notes recall checkpoint, then implement the capped explicit tool loop
+```
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |

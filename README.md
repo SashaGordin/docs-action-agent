@@ -6,7 +6,7 @@ The capstone will become a domain-neutral, production-minded workflow over one a
 
 ## Current status
 
-Session 5 is complete. The repository now has a typed FastAPI vertical slice from HTTP request through an application use case and injected provider fake. Offline tests cover success, request validation, provider timeout mapping, and non-leaky unexpected failures. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
+The foundation through Session 6 is complete: the repository has a typed FastAPI vertical slice, deterministic provider fake, offline failure tests, and a verified container health path. The bounded agent-loop design, both read-only tools, and the executable two-tool allowlist are implemented and tested; the recall checkpoint and explicit capped loop are next. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
 
 The workspace is a local Git repository on `main`. No GitHub repository or remote has been created.
 
@@ -33,6 +33,7 @@ The hosted model sits behind a small provider interface. An OpenAI-compatible lo
 - [October 26 readiness and session queue](docs/OCTOBER_26_READINESS.md)
 - [Current status](docs/STATUS.md)
 - [Architecture decisions](docs/DECISIONS.md)
+- [Bounded agent-loop design](docs/AGENT_LOOP.md)
 - [Evidence ledger](docs/EVIDENCE.md)
 - [Learning sources](docs/SOURCES.md)
 - [Repository working agreement](AGENTS.md)
@@ -41,7 +42,7 @@ The hosted model sits behind a small provider interface. An OpenAI-compatible lo
 
 One corpus, one index, one workflow, two read-only tools, one approval-gated draft tool, and no external writes. Kubernetes, fine-tuning, elaborate UI work, multi-agent orchestration, LangChain, MCP, and Pinecone are outside the default six-week scope.
 
-The current application exposes `GET /health` and `POST /questions`. The question route uses a deterministic fake provider; no hosted provider call, retrieval, tool use, or external write occurs yet.
+The current application exposes `GET /health` and `POST /questions`. The question route still uses a deterministic fake provider. Fixture-backed `evidence_search` and `source_lookup` tools exist behind typed execution boundaries and an explicit allowlist but are not yet connected to the question route; no hosted provider call or external write occurs.
 
 ## Development setup
 

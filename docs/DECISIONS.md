@@ -61,3 +61,13 @@ ADRs are append-only. A changed decision receives a new record that supersedes t
 - **Decision:** Select the English documentation in `fastapi/fastapi` as the provisional single corpus. Do not ingest or treat the corpus as fully approved until its exact tag/commit, included paths, exclusions, attribution, and durable source-URL rule have been reviewed and recorded.
 - **Consequences:** Corpus selection is no longer an open candidate choice, but corpus pinning remains a dated blocker. Translations, generated reference noise, unrelated repository content, and user-generated issue content remain out of scope.
 - **Revisit when:** The proposed pin or bounded subset fails the criteria in `docs/SPEC.md`, is impractical to evaluate locally, or cannot preserve MIT attribution and durable citations.
+
+## ADR-007 — Bounded model-directed tool selection
+
+- **Status:** Accepted design; two-tool allowlist implemented, bounded loop pending
+- **Date:** 2026-10-03
+- **Context:** The documentation workflow will expose two read-only capabilities. Some questions need broad evidence discovery, while others refer to a source already known from context. Always running both tools would waste work, but allowing model-directed selection adds nondeterminism, a diagnostic boundary, and attack surface.
+- **Options:** Always run a deterministic `evidence_search` then `source_lookup` sequence; let the model select any available capability; let the model select between exactly two application-allowlisted tools inside a bounded loop.
+- **Decision:** Let the model propose either `evidence_search` or `source_lookup`. Application code validates the tool name and typed arguments, enforces authorization and budgets, executes the tool, validates its result, and decides whether the loop may continue. Begin with three tool calls, four agent iterations, a five-second per-tool timeout, a 45-second per-model-call timeout, a two-minute overall deadline, and at most one budget-counting transient retry. Grounded answer and safe abstention are successful terminal states.
+- **Consequences:** The workflow can avoid unnecessary lookups and refine evidence when needed. Tool-choice behavior requires explicit tests and diagnostics. Unknown or unauthorized tools, invalid trusted-tool results, and exhausted budgets fail closed. Model requests never grant execution authority.
+- **Revisit when:** Fixed routing proves equally useful with lower error/cost, evaluation shows unreliable tool selection, measured provider latency makes the deadlines unsuitable, or a proposed capability cannot fit the two-tool boundary.

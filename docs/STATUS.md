@@ -1,31 +1,31 @@
 # Current Status
 
-**Last updated:** 2026-10-02
-**Sprint state:** Session 6 complete; container and baseline threat assumptions verified
-**Current sprint gate:** Week 1 — application foundations and vertical slice
-**Current session:** Session 6 — container and baseline assumptions complete
-**Next planned session:** Session 7 — Week 1 evidence gate (October 3 readiness-plan block)
+**Last updated:** 2026-10-07
+**Sprint state:** Two bounded read-only tools and executable allowlist complete; explicit loop pending
+**Current sprint gate:** Week 2 — bounded tool use and explicit agent loop
+**Current session:** Second read-only `source_lookup` tool and executable allowlist complete
+**Next planned session:** Recall checkpoint, then Session 11 explicit tool loop
 
 **October 26 scheduling overlay:** The local [Stephen Anthony readiness plan](OCTOBER_26_READINESS.md) now governs call-critical sequencing, weekly capacity, catch-up decisions, and the protected October 22–25 review window. Sasha may say `Start the next session` to advance the agent-architecture capstone track; FDE and Riser are separate self-directed tracks. Available time is optional unless it differs from the current card or calendar timebox.
 
-## Completed in Session 6
+## Completed in the second read-only tool and allowlist session
 
-- Distinguished an immutable image from a running container, the build context from image contents, and a server bind address from a probe destination.
-- Added a Python 3.12 Docker image with a pinned uv executable, cached locked runtime dependencies, application source, noninteractive Uvicorn startup, and a liveness probe.
-- Added `.dockerignore` exclusions for credentials, the host virtual environment, Git history, tests, documentation, bytecode, and caches.
-- Replaced inaccessible paid Session 6 material with exact free official Docker and uv documentation sections.
-- Recorded baseline threats for untrusted user input, untrusted model output, and credentials, including current controls and residual limitations.
-- Built `docs-action-agent:dev`, started a temporary container, received `{"status":"ok"}`, observed Docker status `running healthy`, and removed the container.
+- Added a strict, bounded `source_lookup` contract that returns full controlled content for one known chunk ID and a non-retryable `not_found` error for an absent ID.
+- Kept broad discovery and exact retrieval distinct: `evidence_search` returns bounded ranked previews, while `source_lookup` returns one full controlled record.
+- Added a raw-argument lookup boundary and an executable registry containing exactly `evidence_search` and `source_lookup`.
+- Proved both approved tools execute through the registry, invalid raw arguments fail safely, and the unknown `delete_repository` tool name returns `tool_not_allowed` without dispatch.
+- Identified the fixture limitation: three static, hand-authored records prove contracts and denial behavior but not corpus coverage, realistic chunk quality, scaling, or answer usefulness.
+- Recorded two hours actual time and a 5/5 daily score.
 
 ## Blocked or pending decisions
 
-- **Required before corpus ingestion:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule by 2026-10-06, before Session 15.
+- **Required before corpus ingestion and now overdue:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule before the October 11 corpus-contract block.
 - **Optional repository publication:** no GitHub repository or remote exists; decide public versus private before publication.
 - Hosted model provider and model name remain unselected; choose them only before a scheduled hosted-adapter or evaluation requirement, and provide credentials at runtime rather than committing them.
 
 ## Next action
 
-Begin the Session 7 Week 1 evidence gate. Recheck the full slice, container startup, documentation, secret hygiene, and Sasha's architecture explanation without adding later-card features.
+Run the 30-minute closed-notes recall checkpoint for tools, tokens/context, loops, validation, and deterministic boundaries. Then begin Session 11's explicit capped tool loop without adding tools or corpus ingestion.
 
 ## Validation state
 
@@ -61,6 +61,23 @@ Begin the Session 7 Week 1 evidence gate. Recheck the full slice, container star
 | Session 6 threat baseline | Passing | `docs/THREAT_MODEL.md` distinguishes untrusted input, model output, and credentials with current controls and residual limitations |
 | Session 6 artifact commit | Passing | `0975698` |
 | Session 6 actual time / daily score | Passing | Planned 20 minutes; actual 2 hours; 5/5 |
+| Restructured Session 7 classification | Passing | Deterministic behavior, model generation, and model-selected tool behavior classified and defended |
+| Restructured Session 7 loop design | Passing | Allowed tools, budgets, timeouts, retry policy, successful terminal states, and fail-closed states are explicit in `docs/AGENT_LOOP.md` |
+| Restructured Session 7 decision record | Passing | ADR-007 contains context, options, decision, consequences, and revisit conditions |
+| Restructured Session 7 documentation validation | Passing | Required files and all 42 session-card fields present; learning-state check and `git diff --check` passed on 2026-10-03 |
+| First tool argument/result contract | Passing | Strict Pydantic models bound query, result count, identifiers, source metadata, excerpts, scores, and extra fields |
+| First tool deterministic behavior | Passing | Fixture-backed `evidence_search` ranks by token overlap and chunk ID, filters zero-score records, and performs no external I/O |
+| First tool safe error boundary | Passing | Raw invalid arguments return a bounded application-owned `ToolError` without raw payload or Pydantic detail |
+| First tool focused tests | Passing | `uv run pytest -q tests/test_tools.py` returned `32 passed in 0.05s` on 2026-10-05 |
+| First tool full regression suite | Passing | `uv run pytest -q` returned `52 passed in 0.14s` on 2026-10-05 |
+| First tool actual time / daily score | Passing | Planned combined time 2 hours 45 minutes; actual 3 hours; 5/5 |
+| Second tool argument/result contract | Passing | Strict `chunk_id` input and bounded full-record output reject extra fields; absent IDs return non-retryable `not_found` |
+| Exact lookup behavior | Passing | `source_lookup` deterministically returns one controlled record and performs no external I/O |
+| Executable two-tool allowlist | Passing | Registry exposes exactly `evidence_search` and `source_lookup`; dispatch uses stored executors rather than dynamic name lookup |
+| Unknown-tool denial | Passing | `delete_repository` returns non-retryable `tool_not_allowed` before any capability executes |
+| Second tool focused tests | Passing | `uv run pytest -q tests/test_tools.py` returned `44 passed in 0.06s` on 2026-10-07 |
+| Second tool full regression suite | Passing | `uv run pytest -q` returned `64 passed in 0.17s` on 2026-10-07 |
+| Second tool actual time / daily score | Passing | Planned 90 minutes; actual 2 hours; 5/5 |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
 | Locked environment resolution | Passing | `uv sync --locked` completed against the lockfile on 2026-10-02 |

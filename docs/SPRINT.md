@@ -111,6 +111,8 @@
 
 ### Session 7 — Week 1 evidence gate
 
+**Schedule adjustment (2026-10-03):** Sasha deferred the repeated foundation review until the explicit agent loop exists. This block was restructured to complete Session 8's agent-versus-workflow content and design artifact. The Week 1 start/test/container checks remain required and will be folded into the explicit-loop gate rather than treated as completed here.
+
 **Date / duration:** Tuesday, 2026-09-29 — 75 minutes  
 **Objective:** Finish the minimal container if needed, run the Week 1 gate, and publish a truthful progress note.  
 **Concepts first:** reproducibility, validation evidence, known limitation versus failure, why a model call is only one component.  
