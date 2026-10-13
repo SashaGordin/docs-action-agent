@@ -8,7 +8,7 @@ The capstone will become a domain-neutral, production-minded workflow over one a
 
 The foundation through Session 6 is complete: the repository has a typed FastAPI vertical slice, deterministic provider fake, offline failure tests, and a verified container health path. The bounded agent-loop design, both read-only tools, and the executable two-tool allowlist are implemented and tested; the recall checkpoint and explicit capped loop are next. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
 
-The workspace is a local Git repository on `main`. No GitHub repository or remote has been created.
+The project is published as the public [`SashaGordin/docs-action-agent`](https://github.com/SashaGordin/docs-action-agent) GitHub repository. The local `main` branch tracks `origin/main`.
 
 ## Proposed system boundary
 

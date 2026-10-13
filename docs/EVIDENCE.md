@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Use repository-relative links until a public remote exists. Replace `planned` entries with commit hashes/URLs and durable artifacts as work is produced. Each evaluation must state code revision, corpus version, evaluation-set version, provider/model, and configuration.
+Use repository-relative links for files and public GitHub URLs for remotely verifiable repository evidence. Replace `planned` entries with commit hashes/URLs and durable artifacts as work is produced. Each evaluation must state code revision, corpus version, evaluation-set version, provider/model, and configuration.
 
 ## 2026-09-22 — Bootstrap
 
@@ -21,10 +21,18 @@ Use repository-relative links until a public remote exists. Replace `planned` en
 | Learning and roadmap baseline | [Learning matrix](LEARNING_MATRIX.md) | Produced from Sasha's diagnostic explanations; gaps and deferred topics retained |
 | Written request-path explanation | [Request-path evidence](LEARNING_MATRIX.md#request-path-explanation-evidence) | Produced; provider-adapter and deterministic validation gaps identified |
 | Provisional corpus decision | [ADR-006](DECISIONS.md#adr-006--provisional-fastapi-english-documentation-corpus) | FastAPI English docs selected; immutable pin and bounded paths due by 2026-10-06 |
-| Local version control | [Status](STATUS.md) | Git initialized on `main`; no remote or GitHub repository created |
+| Local version control | [Status](STATUS.md) | Git initialized on `main`; later published with the original history intact |
 | Session artifact commit | `409ec75` | `Record Session 1 baseline and corpus decision` |
 | Session validation | [Status](STATUS.md#validation-state) | All Session 1 and documentation checks passed on 2026-09-23 |
 | Application tests/evaluations | — | Not applicable: Session 1 intentionally added no application code |
+
+## 2026-10-12 — Public repository publication
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Public GitHub repository | [`SashaGordin/docs-action-agent`](https://github.com/SashaGordin/docs-action-agent) | Public; default branch `main` |
+| History preservation | [Commit history](https://github.com/SashaGordin/docs-action-agent/commits/main/) | Existing local history published intact; no repository restart |
+| Local tracking branch | [Status](STATUS.md) | Local `main` tracks `origin/main` over HTTPS |
 
 ## 2026-09-24 — Session 2 Python project and test harness
 

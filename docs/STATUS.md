@@ -1,6 +1,6 @@
 # Current Status
 
-**Last updated:** 2026-10-07
+**Last updated:** 2026-10-12
 **Sprint state:** Two bounded read-only tools and executable allowlist complete; explicit loop pending
 **Current sprint gate:** Week 2 — bounded tool use and explicit agent loop
 **Current session:** Second read-only `source_lookup` tool and executable allowlist complete
@@ -16,11 +16,11 @@
 - Proved both approved tools execute through the registry, invalid raw arguments fail safely, and the unknown `delete_repository` tool name returns `tool_not_allowed` without dispatch.
 - Identified the fixture limitation: three static, hand-authored records prove contracts and denial behavior but not corpus coverage, realistic chunk quality, scaling, or answer usefulness.
 - Recorded two hours actual time and a 5/5 daily score.
+- Published the existing commit history as the public [`SashaGordin/docs-action-agent`](https://github.com/SashaGordin/docs-action-agent) repository; local `main` now tracks `origin/main`.
 
 ## Blocked or pending decisions
 
 - **Required before corpus ingestion and now overdue:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule before the October 11 corpus-contract block.
-- **Optional repository publication:** no GitHub repository or remote exists; decide public versus private before publication.
 - Hosted model provider and model name remain unselected; choose them only before a scheduled hosted-adapter or evaluation requirement, and provide credentials at runtime rather than committing them.
 
 ## Next action
