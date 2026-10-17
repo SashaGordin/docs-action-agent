@@ -6,7 +6,7 @@ The capstone will become a domain-neutral, production-minded workflow over one a
 
 ## Current status
 
-The foundation through Session 6 is complete: the repository has a typed FastAPI vertical slice, deterministic provider fake, offline failure tests, and a verified container health path. The bounded agent-loop design, both read-only tools, and the executable two-tool allowlist are implemented and tested; the recall checkpoint and explicit capped loop are next. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
+The foundation and explicit bounded-loop gate are complete: the repository has a typed FastAPI vertical slice, two allowlisted read-only tools, deterministic provider fakes, an explicit capped model/tool loop, typed terminal and failure states, offline scenario tests, and a verified container health path. The loop is not yet connected to the public question route. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
 
 The project is published as the public [`SashaGordin/docs-action-agent`](https://github.com/SashaGordin/docs-action-agent) GitHub repository. The local `main` branch tracks `origin/main`.
 
@@ -42,7 +42,7 @@ The hosted model sits behind a small provider interface. An OpenAI-compatible lo
 
 One corpus, one index, one workflow, two read-only tools, one approval-gated draft tool, and no external writes. Kubernetes, fine-tuning, elaborate UI work, multi-agent orchestration, LangChain, MCP, and Pinecone are outside the default six-week scope.
 
-The current application exposes `GET /health` and `POST /questions`. The question route still uses a deterministic fake provider. Fixture-backed `evidence_search` and `source_lookup` tools exist behind typed execution boundaries and an explicit allowlist but are not yet connected to the question route; no hosted provider call or external write occurs.
+The current application exposes `GET /health` and `POST /questions`. The question route still uses the earlier deterministic text-provider slice. Separately, fixture-backed `evidence_search` and `source_lookup` tools execute through the explicit bounded loop with a scripted agent provider. The next integration step comes after the corpus contract; no hosted provider call or external write occurs.
 
 ## Development setup
 

@@ -1,7 +1,7 @@
 # Bounded Agent Loop
 
-**Status:** Design accepted; implementation begins with the first read-only tool contract
-**Date:** 2026-10-03
+**Status:** Implemented and verified with deterministic scripted scenarios
+**Date:** Designed 2026-10-03; implementation verified 2026-10-16
 
 ## Why the model selects tools
 
@@ -31,28 +31,35 @@ controls. They are not tools the model may select.
 Validated user question
         |
         v
-Model receives instructions and the two allowed tool schemas
+Start overall deadline
         |
-        +---- typed final answer with adequate evidence ----> grounded answer
+        v
+Check iteration budget -> exhausted -----------------------> typed loop failure
         |
-        +---- typed insufficient-evidence result ----------> safe abstention
+        v
+Call provider with timeout -> timed out --------------------> typed loop failure
         |
-        `---- proposed tool call
+        +---- typed final answer ---------------------------> grounded answer
+        |
+        +---- typed abstention -----------------------------> safe abstention
+        |
+        `---- typed tool request
                     |
                     v
-          Check overall deadline and iteration budget
-          Check the tool allowlist
-          Validate typed arguments
-          Check deterministic authorization/approval policy
+          Reject identical repeat or exhausted tool budget
                     |
                     v
-          Execute with the per-tool timeout
+          Dispatch through the two-tool allowlist
+          and execute with per-tool timeout
+                    |
+                    +---- unknown tool ---------------------> typed denial
+                    +---- invalid trusted result ----------> typed loop failure
+                    +---- second invalid-argument result ---> typed loop failure
                     |
                     v
-          Validate the typed tool result
-                    |
-                    v
-          Append the result to context and repeat
+          Append validated result to context and repeat
+
+The overall deadline may terminate any nonterminal path above.
 ```
 
 The model proposes a tool request. It never receives direct authority to execute
@@ -67,7 +74,8 @@ code or relax an application control.
 | Per-tool timeout | 5 seconds |
 | Per-model-call timeout | 45 seconds |
 | Overall request deadline | 2 minutes |
-| Transient retries | At most 1; it consumes the applicable call and iteration budgets |
+| Invalid-argument corrections | 1; the corrected request consumes normal budgets |
+| Transient retries | 0 in the current implementation; the accepted design permits at most 1 later |
 
 The tool-call limit counts executions, not unique tool names. A tool can be called
 more than once with different arguments, and a retry counts as another call.
@@ -80,9 +88,48 @@ safe abstention when the available evidence is insufficient.
 Stop immediately for an unknown or unauthorized tool, an invalid result from trusted
 tool code, an exhausted call/iteration budget, or an exhausted overall deadline.
 A malformed model-proposed argument may receive one typed validation response so the
-model can correct it, provided budgets remain. A genuinely transient tool or provider
-failure may be retried once when time remains. Valid but unhelpful evidence is not a
-retry failure; the model may choose another allowed call within the same budgets.
+model can correct it, provided budgets remain. A second malformed request fails. The
+current implementation does not retry transient tool or provider failures; adding the
+single retry allowed by ADR-007 is deferred until a real provider supplies a typed,
+demonstrably transient failure. Valid but unhelpful evidence is not a retry failure;
+the model may choose another allowed call within the same budgets.
+
+## Verified scenarios
+
+| Scenario | Expected terminal behavior | Result |
+|---|---|---|
+| Provider returns a final answer immediately | Return the typed answer | Pass |
+| Provider returns an abstention immediately | Return the typed abstention | Pass |
+| One tool request, then answer | Execute once and return the answer | Pass |
+| Search followed by lookup, then answer | Execute both distinct requests | Pass |
+| Identical tool request repeated | `repeated_tool_call` | Pass |
+| Tool-call budget exhausted | `tool_call_limit_exceeded` | Pass |
+| Iteration budget exhausted | `iteration_limit_exceeded` | Pass |
+| Unknown tool requested | `tool_not_allowed` | Pass |
+| One malformed argument request is corrected | Return validation result to provider and continue | Pass |
+| Second malformed argument request | `argument_correction_limit_exceeded` | Pass |
+| Tool exceeds its timeout | `tool_timeout` | Pass |
+| Provider exceeds its timeout | `model_timeout` | Pass |
+| Overall deadline expires | `overall_timeout` | Pass |
+| Trusted executor returns an unknown result type | `invalid_tool_result` | Pass |
+| Blank final answer or abstention reason | Pydantic validation rejects construction | Pass |
+
+The focused command `uv run pytest -q tests/test_agent_loop.py` returned 16 passing
+tests on 2026-10-16. The full suite returned 80 passing tests.
+
+## Current limitations
+
+- `ScriptedAgentProvider` proves loop control deterministically; no hosted provider
+  adapter currently converts live model output into `AgentAction` values.
+- The loop is not yet connected to the public `/questions` route.
+- The tools still query three hand-authored fixtures, not the pinned corpus or a
+  measured retrieval index.
+- The presence and shape of citations are validated, but evidence support and citation
+  adequacy are not yet evaluated.
+- `execute_tool_async` uses `asyncio.to_thread`. A timeout stops waiting for the result,
+  but Python cannot forcibly stop synchronous work already running in that thread.
+- No transient retry is implemented. Retry classification must be evidence-driven and
+  must consume the existing budgets when added.
 
 ## Operation ownership
 

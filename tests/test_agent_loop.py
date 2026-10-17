@@ -1,4 +1,7 @@
 import asyncio
+import pytest
+
+from pydantic import ValidationError
 
 from docs_action_agent.provider import ScriptedAgentProvider
 from docs_action_agent.agent_loop import (
@@ -10,6 +13,7 @@ from docs_action_agent.agent_loop import (
     ToolError,
     AgentAction,
     ToolExecutionResult,
+    Abstention,
 )
 from docs_action_agent.tools import execute_tool_async
 
@@ -444,3 +448,78 @@ def test_run_agent_rejects_overall_timeout() -> None:
     assert isinstance(result, AgentLoopError)
     assert result.code == "overall_timeout"
     assert result.retryable is False
+
+
+def test_run_agent_returns_immediate_abstention() -> None:
+    abstention = Abstention(
+        kind="abstention",
+        reason="The available evidence is insufficient to answer the question.",
+    )
+    agent_provider = ScriptedAgentProvider(
+        outcomes=[
+            abstention,
+        ]
+    )
+
+    result = asyncio.run(
+        run_agent(
+            question="How does FastAPI validate request bodies?",
+            provider=agent_provider,
+            tool_executor=execute_tool_async,
+            limits=LoopLimits(),
+        )
+    )
+
+    assert result == abstention
+
+
+async def invalid_tool_executor(tool_name: str, raw_arguments: object):
+    return {"oops": "not the right return"}
+
+
+def test_run_agent_rejects_invalid_tool_result() -> None:
+    answer = FinalAnswer(
+        kind="final_answer",
+        answer="This answer must not be reached.",
+        citations=[],
+    )
+    agent_provider = ScriptedAgentProvider(
+        outcomes=[
+            ToolRequest(
+                kind="tool_request",
+                tool_name="evidence_search",
+                raw_arguments={"query": "FastAPI", "result_limit": 3},
+            ),
+            answer,
+        ]
+    )
+
+    result = asyncio.run(
+        run_agent(
+            question="How does FastAPI validate request bodies?",
+            provider=agent_provider,
+            tool_executor=invalid_tool_executor,
+            limits=LoopLimits(),
+        )
+    )
+
+    assert isinstance(result, AgentLoopError)
+    assert result.code == "invalid_tool_result"
+    assert result.retryable is False
+
+
+def test_final_answer_rejects_blank_answer() -> None:
+    with pytest.raises(ValidationError):
+        FinalAnswer(
+            kind="final_answer",
+            answer="  ",
+            citations=[],
+        )
+
+
+def test_abstention_rejects_blank_answer() -> None:
+    with pytest.raises(ValidationError):
+        Abstention(
+            kind="abstention",
+            reason="  ",
+        )

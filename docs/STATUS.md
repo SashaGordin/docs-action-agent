@@ -1,31 +1,33 @@
 # Current Status
 
-**Last updated:** 2026-10-12
-**Sprint state:** Two bounded read-only tools and executable allowlist complete; explicit loop pending
-**Current sprint gate:** Week 2 — bounded tool use and explicit agent loop
-**Current session:** Second read-only `source_lookup` tool and executable allowlist complete
-**Next planned session:** Recall checkpoint, then Session 11 explicit tool loop
+**Last updated:** 2026-10-16
+**Sprint state:** Bounded tools, explicit agent loop, and deferred foundation gate complete; corpus contract next
+**Current sprint gate:** Week 3 — pin the corpus and define reproducible ingestion inputs
+**Current session:** Session 11 explicit tool loop and deferred foundation gate complete
+**Next planned session:** Pin the FastAPI corpus and implement the Session 15 manifest/ingestion contract
 
 **October 26 scheduling overlay:** The local [Stephen Anthony readiness plan](OCTOBER_26_READINESS.md) now governs call-critical sequencing, weekly capacity, catch-up decisions, and the protected October 22–25 review window. Sasha may say `Start the next session` to advance the agent-architecture capstone track; FDE and Riser are separate self-directed tracks. Available time is optional unless it differs from the current card or calendar timebox.
 
-## Completed in the second read-only tool and allowlist session
+## Completed in the explicit tool-loop and foundation-gate session
 
-- Added a strict, bounded `source_lookup` contract that returns full controlled content for one known chunk ID and a non-retryable `not_found` error for an absent ID.
-- Kept broad discovery and exact retrieval distinct: `evidence_search` returns bounded ranked previews, while `source_lookup` returns one full controlled record.
-- Added a raw-argument lookup boundary and an executable registry containing exactly `evidence_search` and `source_lookup`.
-- Proved both approved tools execute through the registry, invalid raw arguments fail safely, and the unknown `delete_repository` tool name returns `tool_not_allowed` without dispatch.
-- Identified the fixture limitation: three static, hand-authored records prove contracts and denial behavior but not corpus coverage, realistic chunk quality, scaling, or answer usefulness.
-- Recorded two hours actual time and a 5/5 daily score.
-- Published the existing commit history as the public [`SashaGordin/docs-action-agent`](https://github.com/SashaGordin/docs-action-agent) repository; local `main` now tracks `origin/main`.
+- Implemented a public asynchronous `run_agent` seam with an application-owned provider protocol and tool-executor protocol.
+- Added typed model actions and terminal outcomes: tool request, final answer, safe abstention, tool error, and loop error.
+- Enforced three tool calls, four provider iterations, per-tool/model/overall timeouts, exact-repeat rejection, one invalid-argument correction, and typed fail-closed outcomes.
+- Validated trusted tool results before returning them to the provider and rejected blank final answers and abstention reasons.
+- Verified 16 focused scenarios and 80 total tests, including success, multiple distinct tool calls, denial, malformed requests, all three timeout boundaries, exhausted budgets, abstention, and invalid trusted results.
+- Re-ran the deferred foundation gate: locked sync, Python 3.12.14, live API health, image build, and container health all passed.
+- Caught a container startup dependency sync, changed the entrypoint to the installed Uvicorn executable, and proved healthy startup with container networking disabled.
+- Recorded the implemented state machine, scenario table, and current limitations in `docs/AGENT_LOOP.md`.
+- Recorded approximately 5.5 hours actual time and a 5/5 daily score.
 
 ## Blocked or pending decisions
 
-- **Required before corpus ingestion and now overdue:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule before the October 11 corpus-contract block.
+- **Required before corpus ingestion and overdue:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule.
 - Hosted model provider and model name remain unselected; choose them only before a scheduled hosted-adapter or evaluation requirement, and provide credentials at runtime rather than committing them.
 
 ## Next action
 
-Run the 30-minute closed-notes recall checkpoint for tools, tokens/context, loops, validation, and deterministic boundaries. Then begin Session 11's explicit capped tool loop without adding tools or corpus ingestion.
+Start the pinned-corpus contract: choose an immutable FastAPI revision, bound included paths and exclusions, preserve attribution/source URLs, and test a deterministic manifest schema without fetching during unit tests.
 
 ## Validation state
 
@@ -78,6 +80,15 @@ Run the 30-minute closed-notes recall checkpoint for tools, tokens/context, loop
 | Second tool focused tests | Passing | `uv run pytest -q tests/test_tools.py` returned `44 passed in 0.06s` on 2026-10-07 |
 | Second tool full regression suite | Passing | `uv run pytest -q` returned `64 passed in 0.17s` on 2026-10-07 |
 | Second tool actual time / daily score | Passing | Planned 90 minutes; actual 2 hours; 5/5 |
+| Explicit loop public seam | Passing | `run_agent` accepts an application-owned provider and tool executor and returns typed terminal outcomes |
+| Explicit loop budgets and timeouts | Passing | Three tool calls, four iterations, five-second tool, 45-second model, and 120-second overall defaults are typed and tested |
+| Explicit loop fail-closed behavior | Passing | Repeats, unknown tools, second malformed request, invalid trusted result, exhausted budgets, and timeouts terminate predictably |
+| Explicit loop terminal schemas | Passing | Final answer and abstention are typed, whitespace-stripped, nonblank, and bounded |
+| Explicit loop focused scenarios | Passing | `uv run pytest -q tests/test_agent_loop.py` returned 16 passed in 0.06s on 2026-10-16 |
+| Session 11 full regression suite | Passing | `uv run pytest -q` returned 80 passed in 0.19s on 2026-10-16 |
+| Session 11 live health check | Passing | Uvicorn returned `{"status":"ok"}` with HTTP 200 on `127.0.0.1:8000` |
+| Session 11 container gate | Passing | Image `docs-action-agent:session11` built; offline-network container reached Docker `healthy` after entrypoint correction |
+| Session 11 actual time / daily score | Passing | Planned 3 hours; approximately 5.5 hours actual; 5/5 |
 | Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
 | Locked environment resolution | Passing | `uv sync --locked` completed against the lockfile on 2026-10-02 |

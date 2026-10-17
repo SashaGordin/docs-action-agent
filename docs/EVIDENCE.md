@@ -214,6 +214,40 @@ Estimated remaining hours / planned capacity remaining: Reforecast after the Oct
 Next smallest step: Complete the closed-notes recall checkpoint, then implement the capped explicit tool loop
 ```
 
+## 2026-10-16 — Session 11 explicit tool loop and foundation gate
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Explicit loop implementation | [`agent_loop.py`](../src/docs_action_agent/agent_loop.py) | Public async loop with typed actions/outcomes, provider and executor protocols, budgets, timeouts, exact-repeat protection, result validation, and one malformed-argument correction |
+| Deterministic scripted provider | [`ScriptedAgentProvider`](../src/docs_action_agent/provider.py) | Supplies ordered typed actions without a network or paid model call |
+| Asynchronous tool adapter | [`execute_tool_async`](../src/docs_action_agent/tools.py) | Runs the existing synchronous two-tool dispatcher without blocking the event loop; timed-out thread work cannot be forcibly stopped |
+| State and ownership explanation | [Bounded agent loop](AGENT_LOOP.md) | Implemented state diagram separates model proposals from deterministic validation, authorization, execution, budgets, and termination |
+| Scenario result table | [Verified scenarios](AGENT_LOOP.md#verified-scenarios) | Success, abstention, distinct/repeated calls, malformed arguments, denial, budgets, timeouts, and invalid results documented |
+| Focused scenario suite | [`test_agent_loop.py`](../tests/test_agent_loop.py) | `uv run pytest -q tests/test_agent_loop.py` returned 16 passed in 0.06 seconds |
+| Full regression suite | [Status](STATUS.md#validation-state) | `uv run pytest -q` returned 80 passed in 0.19 seconds |
+| Foundation setup | [README development setup](../README.md#development-setup) | Locked sync passed and project interpreter reported Python 3.12.14 |
+| Live application health | [README development setup](../README.md#development-setup) | Uvicorn started on `127.0.0.1:8000`; `GET /health` returned `{"status":"ok"}` with HTTP 200 |
+| Container build and health | [`Dockerfile`](../Dockerfile) | Image `docs-action-agent:session11` built; container reached Docker `healthy` with networking disabled |
+| Failure caught during closeout | [`Dockerfile`](../Dockerfile) | Initial `uv run` entrypoint synchronized and downloaded development packages at startup; direct installed-Uvicorn entrypoint removed runtime dependency resolution and passed the offline-network check |
+| Session artifact commit | — | Pending focused closeout commit |
+
+Daily log:
+
+```text
+Date / planned time / actual time: 2026-10-16 / 3 hours / approximately 5.5 hours
+Today's workstream and agent-architecture layer: Capstone / explicit agent-control loop and production foundation
+Recall before notes: Correctly explained tokens/context, deterministic authorization, terminal actions, stop states, and the difference between iterations and tool calls; needed guidance on protocols, loop construction, and precise validation tests
+Artifact or observation produced: Explicit bounded loop, typed terminal/failure models, scripted provider, async tool adapter, 16 scenario tests, state diagram/table, and offline-starting container correction
+Verification and result: Locked sync passed; Python 3.12.14; 16 focused and 80 total tests passed; local HTTP 200; image built; offline-network container healthy; documentation checks pending
+What I can now explain: The model proposes a typed action, while application code validates and authorizes tools, enforces budgets/timeouts, validates results, and recognizes final answer or abstention
+Failure, uncertainty, or limitation: A blank-reason test initially passed because the wrong discriminator was invalid; timeout cannot stop synchronous thread work; loop is not wired to the public route or a live provider; fixture evidence is not a measured corpus
+Score (Recall / Build-observe / Verify / Explain / Record): 5 / 5
+Actual hours this week / planned hours: approximately 5.5 hours recorded in this session / 7 hours 45 minutes capstone planned for Oct 12–18
+Call-critical gates complete / remaining: Foundation and bounded-loop gate complete; corpus/retrieval, evaluation, approval, diagnostics, live interaction, and architecture review remain
+Estimated remaining hours / planned capacity remaining: Reforecast after corpus-contract session
+Next smallest step: Pin the FastAPI corpus and define the reproducible manifest/ingestion contract
+```
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |

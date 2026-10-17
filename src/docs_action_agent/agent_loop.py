@@ -33,9 +33,18 @@ class LoopLimits(BaseModel):
     overall_timeout_seconds: float = Field(default=120.0, gt=0, strict=True)
 
 
+class Abstention(BaseModel):
+    kind: Literal["abstention"]
+    reason: Annotated[
+        str, StringConstraints(strip_whitespace=True, min_length=1, max_length=8000)
+    ]
+
+
 class FinalAnswer(BaseModel):
     kind: Literal["final_answer"]
-    answer: str
+    answer: Annotated[
+        str, StringConstraints(strip_whitespace=True, min_length=1, max_length=8000)
+    ]
     citations: list[Citation]
 
 
@@ -55,14 +64,15 @@ class AgentLoopError(BaseModel):
         "tool_timeout",
         "model_timeout",
         "overall_timeout",
+        "invalid_tool_result",
     ]
     message: str
     retryable: Literal[False]
 
 
-type AgentAction = ToolRequest | FinalAnswer
+type AgentAction = ToolRequest | FinalAnswer | Abstention
 
-type AgentOutcome = FinalAnswer | AgentLoopError | ToolError
+type AgentOutcome = FinalAnswer | AgentLoopError | ToolError | Abstention
 
 
 class ToolExecutor(Protocol):
@@ -112,7 +122,7 @@ async def _run_agent_loop(
                 message="The model call timed out.",
                 retryable=False,
             )
-        if isinstance(action, FinalAnswer):
+        if isinstance(action, (FinalAnswer, Abstention)):
             return action
         else:
             if action in seen_tool_requests:
@@ -143,6 +153,16 @@ async def _run_agent_loop(
                     kind="loop_error",
                     code="tool_timeout",
                     message="The tool execution timed out.",
+                    retryable=False,
+                )
+            if not isinstance(
+                tool_result,
+                (EvidenceSearchResult, SourceLookupResult, ToolError),
+            ):
+                return AgentLoopError(
+                    kind="loop_error",
+                    code="invalid_tool_result",
+                    message="Trusted tool code returned an invalid result.",
                     retryable=False,
                 )
             if (

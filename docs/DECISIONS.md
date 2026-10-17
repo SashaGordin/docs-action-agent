@@ -64,10 +64,10 @@ ADRs are append-only. A changed decision receives a new record that supersedes t
 
 ## ADR-007 — Bounded model-directed tool selection
 
-- **Status:** Accepted design; two-tool allowlist implemented, bounded loop pending
+- **Status:** Accepted and implemented for the deterministic scripted-provider path
 - **Date:** 2026-10-03
 - **Context:** The documentation workflow will expose two read-only capabilities. Some questions need broad evidence discovery, while others refer to a source already known from context. Always running both tools would waste work, but allowing model-directed selection adds nondeterminism, a diagnostic boundary, and attack surface.
 - **Options:** Always run a deterministic `evidence_search` then `source_lookup` sequence; let the model select any available capability; let the model select between exactly two application-allowlisted tools inside a bounded loop.
 - **Decision:** Let the model propose either `evidence_search` or `source_lookup`. Application code validates the tool name and typed arguments, enforces authorization and budgets, executes the tool, validates its result, and decides whether the loop may continue. Begin with three tool calls, four agent iterations, a five-second per-tool timeout, a 45-second per-model-call timeout, a two-minute overall deadline, and at most one budget-counting transient retry. Grounded answer and safe abstention are successful terminal states.
-- **Consequences:** The workflow can avoid unnecessary lookups and refine evidence when needed. Tool-choice behavior requires explicit tests and diagnostics. Unknown or unauthorized tools, invalid trusted-tool results, and exhausted budgets fail closed. Model requests never grant execution authority.
+- **Consequences:** The workflow can avoid unnecessary lookups and refine evidence when needed. Tool-choice behavior requires explicit tests and diagnostics. Unknown or unauthorized tools, invalid trusted-tool results, repeated identical calls, and exhausted budgets fail closed. Model requests never grant execution authority. The current implementation allows one invalid-argument correction but performs no transient retry; the design's optional single retry remains deferred until a real provider exposes a typed transient failure.
 - **Revisit when:** Fixed routing proves equally useful with lower error/cost, evaluation shows unreliable tool selection, measured provider latency makes the deadlines unsuitable, or a proposed capability cannot fit the two-tool boundary.
