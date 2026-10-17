@@ -2,6 +2,8 @@ from typing import Protocol
 
 from pydantic import BaseModel
 
+from docs_action_agent.agent_loop import AgentAction, ToolExecutionResult
+
 
 class ProviderError(Exception):
     ...
@@ -34,3 +36,11 @@ class FakeTextProvider:
             raise self.outcome
         return self.outcome
 
+class ScriptedAgentProvider:
+    def __init__(self, outcomes: list[AgentAction]):
+        self.outcomes = outcomes
+
+    async def generate(
+        self, question: str, tool_results: tuple[ToolExecutionResult, ...]
+    ) -> AgentAction:
+        return self.outcomes.pop(0)

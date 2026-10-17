@@ -1,3 +1,4 @@
+import asyncio
 import re
 from typing import Annotated, Literal
 
@@ -205,4 +206,14 @@ def execute_tool(
         message="Tool not allowed",
         code="tool_not_allowed",
         retryable=False,
+    )
+
+
+async def execute_tool_async(
+    tool_name: str, raw_arguments: object
+) -> EvidenceSearchResult | SourceLookupResult | ToolError:
+    return await asyncio.to_thread(
+        execute_tool,
+        tool_name,
+        raw_arguments,
     )
