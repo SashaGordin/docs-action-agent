@@ -248,6 +248,46 @@ Estimated remaining hours / planned capacity remaining: Reforecast after corpus-
 Next smallest step: Pin the FastAPI corpus and define the reproducible manifest/ingestion contract
 ```
 
+## 2026-11-04 — Session 15 corpus manifest and ingestion contract
+
+| Evidence | Link | State / result |
+|---|---|---|
+| Pinned production manifest | [`fastapi-0.162.0.json`](../corpus/fastapi-0.162.0.json) | FastAPI release `0.162.0`, immutable commit, five exact English tutorial paths, byte sizes, SHA-256 hashes, exclusions, fetch method, and source-URL template recorded |
+| Attribution and license | [Corpus attribution](../corpus/ATTRIBUTION.md) | MIT attribution, pinned upstream source, preserved license, and durable citation rule recorded |
+| Manifest and identity module | [`corpus.py`](../src/docs_action_agent/corpus.py) | Strict typed records, path enforcement, deterministic logical/snapshot identities, content verification, and immutable source URLs |
+| Offline contract fixtures | [Fixture manifest](../tests/fixtures/corpus/manifest.json) | Synthetic checked-in Markdown and exact hash/size permit unit tests without network access |
+| Focused contract suite | [`test_corpus.py`](../tests/test_corpus.py) | 18 passed in 0.05 seconds; covers malformed pins/hashes, allowlist and exclusion denial, traversal, deterministic IDs, production pinning, URLs, and fixture verification |
+| Full regression suite | [Status](STATUS.md#validation-state) | 98 passed in 0.19 seconds |
+| Failure caught during development | [`test_corpus.py`](../tests/test_corpus.py) | Three negative tests initially passed because an unrelated extra field triggered validation first; tests were isolated before their intended rules were implemented |
+| Pattern failure caught | [`CorpusManifest.validate_file_paths`](../src/docs_action_agent/corpus.py) | `**/*.md` did not match a top-level tutorial page under `PurePosixPath.match`; the contract now uses both top-level and nested patterns where patterns are needed, while the production manifest lists exact paths |
+
+Sasha's deterministic-identity explanation:
+
+```text
+Use an allowlist because the desired corpus is much smaller than everything
+that must be excluded. Calculate IDs from stable inputs to avoid human error
+and reproduce the same correlation every time. The logical document ID stays
+stable for the same repository path; the snapshot-version ID also binds the
+commit and content hash so provenance changes are detectable.
+```
+
+Daily log:
+
+```text
+Date / planned time / actual time: 2026-11-04 / 90 minutes / approximately 1.5–2 hours
+Today's workstream and agent-architecture layer: Capstone / knowledge, grounding, and reproducible ingestion inputs
+Recall before notes: No initial corpus-manifest baseline; correctly developed the allowlist and calculated-ID rationale after targeted teaching
+Artifact or observation produced: Pinned five-page FastAPI manifest, attribution/license record, strict corpus models, deterministic IDs, immutable source URLs, offline fixture, and 18 focused tests
+Verification and result: 18 focused tests passed; 98 full-suite tests passed; production downloads matched the manifest's recorded hashes and sizes during construction
+What I can now explain: Pin versus hash, logical versus snapshot-version identity, allowlist versus exclusions, and index-time versus query-time work
+Failure, uncertainty, or limitation: Negative tests initially produced false greens from an unrelated extra field; the first corpus has only five pages and has not yet been parsed, chunked, or measured
+Score (Recall / Build-observe / Verify / Explain / Record): 5 / 5
+Actual hours this week / planned hours: Approximately 1.5–2 hours recorded in this session / original sprint calendar has elapsed
+Call-critical gates complete / remaining: Foundation, bounded loop, and corpus contract complete; ingestion/evaluation/retrieval and later safety/diagnosis gates remain
+Estimated remaining hours / planned capacity remaining: Reforecast at the next planning checkpoint
+Next smallest step: Deterministically parse and normalize the fixture, then author evaluation-set v0.1
+```
+
 ## Planned weekly evidence
 
 | Gate | Required durable evidence |

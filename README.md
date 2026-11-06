@@ -6,7 +6,7 @@ The capstone will become a domain-neutral, production-minded workflow over one a
 
 ## Current status
 
-The foundation and explicit bounded-loop gate are complete: the repository has a typed FastAPI vertical slice, two allowlisted read-only tools, deterministic provider fakes, an explicit capped model/tool loop, typed terminal and failure states, offline scenario tests, and a verified container health path. The loop is not yet connected to the public question route. FastAPI English documentation remains provisionally selected pending an immutable version pin and bounded path allowlist.
+The foundation, explicit bounded-loop gate, and corpus contract are complete. The repository has a typed FastAPI vertical slice, two allowlisted read-only tools, deterministic provider fakes, an explicit capped model/tool loop, typed terminal and failure states, offline scenario tests, and a verified container health path. Five FastAPI English tutorial pages are pinned to release `0.162.0` at an immutable commit with exact hashes, attribution, deterministic document identities, and offline contract fixtures. The loop is not yet connected to the public question route; deterministic parsing and the evaluation seed are next.
 
 The project is published as the public [`SashaGordin/docs-action-agent`](https://github.com/SashaGordin/docs-action-agent) GitHub repository. The local `main` branch tracks `origin/main`.
 
@@ -34,6 +34,8 @@ The hosted model sits behind a small provider interface. An OpenAI-compatible lo
 - [Current status](docs/STATUS.md)
 - [Architecture decisions](docs/DECISIONS.md)
 - [Bounded agent-loop design](docs/AGENT_LOOP.md)
+- [Pinned corpus manifest](corpus/fastapi-0.162.0.json)
+- [Corpus attribution](corpus/ATTRIBUTION.md)
 - [Evidence ledger](docs/EVIDENCE.md)
 - [Learning sources](docs/SOURCES.md)
 - [Repository working agreement](AGENTS.md)

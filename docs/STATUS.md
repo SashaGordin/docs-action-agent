@@ -1,33 +1,32 @@
 # Current Status
 
-**Last updated:** 2026-10-16
-**Sprint state:** Bounded tools, explicit agent loop, and deferred foundation gate complete; corpus contract next
-**Current sprint gate:** Week 3 — pin the corpus and define reproducible ingestion inputs
-**Current session:** Session 11 explicit tool loop and deferred foundation gate complete
-**Next planned session:** Pin the FastAPI corpus and implement the Session 15 manifest/ingestion contract
+**Last updated:** 2026-11-04
+**Sprint state:** Bounded loop and pinned corpus contract complete; deterministic ingestion and evaluation seed next
+**Current sprint gate:** Week 3 — parse the controlled corpus deterministically and version the first evaluation cases
+**Current session:** Session 15 corpus manifest and ingestion contract complete
+**Next planned session:** Combine Sessions 16–17 for deterministic parsing/normalization and evaluation-set v0.1
 
-**October 26 scheduling overlay:** The local [Stephen Anthony readiness plan](OCTOBER_26_READINESS.md) now governs call-critical sequencing, weekly capacity, catch-up decisions, and the protected October 22–25 review window. Sasha may say `Start the next session` to advance the agent-architecture capstone track; FDE and Riser are separate self-directed tracks. Available time is optional unless it differs from the current card or calendar timebox.
+**Scheduling note:** The October 26 readiness overlay is now historical. The project continues evidence-first from the next incomplete capstone gate; original dates do not override failed or unfinished acceptance criteria.
 
-## Completed in the explicit tool-loop and foundation-gate session
+## Completed in the corpus-contract session
 
-- Implemented a public asynchronous `run_agent` seam with an application-owned provider protocol and tool-executor protocol.
-- Added typed model actions and terminal outcomes: tool request, final answer, safe abstention, tool error, and loop error.
-- Enforced three tool calls, four provider iterations, per-tool/model/overall timeouts, exact-repeat rejection, one invalid-argument correction, and typed fail-closed outcomes.
-- Validated trusted tool results before returning them to the provider and rejected blank final answers and abstention reasons.
-- Verified 16 focused scenarios and 80 total tests, including success, multiple distinct tool calls, denial, malformed requests, all three timeout boundaries, exhausted budgets, abstention, and invalid trusted results.
-- Re-ran the deferred foundation gate: locked sync, Python 3.12.14, live API health, image build, and container health all passed.
-- Caught a container startup dependency sync, changed the entrypoint to the installed Uvicorn executable, and proved healthy startup with container networking disabled.
-- Recorded the implemented state machine, scenario table, and current limitations in `docs/AGENT_LOOP.md`.
-- Recorded approximately 5.5 hours actual time and a 5/5 daily score.
+- Pinned FastAPI release `0.162.0` to immutable commit `7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4`.
+- Bounded the initial corpus to five foundational English tutorial pages with exact paths, byte sizes, SHA-256 hashes, and commit-pinned citation URLs.
+- Preserved MIT attribution and the upstream license text under `corpus/`.
+- Implemented strict manifest, license, and file models; default-deny path checks; explicit exclusions; traversal rejection; deterministic logical and snapshot-version IDs; source URLs; and byte/hash verification.
+- Added a synthetic checked-in Markdown fixture and manifest so all unit tests run without network access.
+- Verified 18 focused corpus scenarios and 98 total tests.
+- Caught and corrected false-green tests whose unrelated extra field caused the expected validation error before the intended commit/path rules were exercised.
+- Daily score: 5/5. Actual active time was approximately 1.5–2 hours.
 
 ## Blocked or pending decisions
 
-- **Required before corpus ingestion and overdue:** confirm an immutable FastAPI tag/commit, bounded English-documentation path allowlist, exclusions, attribution, and source-URL rule.
 - Hosted model provider and model name remain unselected; choose them only before a scheduled hosted-adapter or evaluation requirement, and provide credentials at runtime rather than committing them.
+- The five-page corpus is intentionally narrow. Expand it only after the first evaluation set exposes a measured coverage gap.
 
 ## Next action
 
-Start the pinned-corpus contract: choose an immutable FastAPI revision, bound included paths and exclusions, preserve attribution/source URLs, and test a deterministic manifest schema without fetching during unit tests.
+Parse and normalize the checked-in fixture deterministically, preserve headings/code/source metadata, prove repeat ingestion is idempotent, and create evaluation-set v0.1 with answerable, misleading, and unanswerable cases.
 
 ## Validation state
 
@@ -89,7 +88,14 @@ Start the pinned-corpus contract: choose an immutable FastAPI revision, bound in
 | Session 11 live health check | Passing | Uvicorn returned `{"status":"ok"}` with HTTP 200 on `127.0.0.1:8000` |
 | Session 11 container gate | Passing | Image `docs-action-agent:session11` built; offline-network container reached Docker `healthy` after entrypoint correction |
 | Session 11 actual time / daily score | Passing | Planned 3 hours; approximately 5.5 hours actual; 5/5 |
-| Corpus candidate decision | Passing provisionally | ADR-006; exact pin/path due by 2026-10-06 |
+| Corpus revision and scope | Passing | FastAPI `0.162.0`; commit `7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4`; five exact English tutorial paths in the production manifest |
+| Corpus attribution and durable URLs | Passing | MIT notice preserved; source URLs render the immutable commit and repository-relative path |
+| Corpus schema and path policy | Passing | Strict models reject extra fields, malformed hashes/commits, out-of-scope paths, explicit exclusions, and traversal |
+| Corpus deterministic identities | Passing | Logical IDs remain stable across source revisions; snapshot-version IDs change with commit or content hash |
+| Corpus offline fixture verification | Passing | Checked-in fixture byte size and SHA-256 match its fixture manifest; changed bytes fail verification |
+| Session 15 focused tests | Passing | `uv run pytest -q tests/test_corpus.py` returned 18 passed in 0.05 seconds on 2026-11-04 |
+| Session 15 full regression suite | Passing | `uv run pytest -q` returned 98 passed in 0.19 seconds on 2026-11-04 |
+| Session 15 actual time / daily score | Passing | Planned 90 minutes; approximately 1.5–2 hours actual; daily rubric 5/5 |
 | Python requirement and selected interpreter | Passing | `requires-python = ">=3.12"`; `uv run python --version` returned Python 3.12.14 |
 | Locked environment resolution | Passing | `uv sync --locked` completed against the lockfile on 2026-10-02 |
 | Package import and pytest discovery | Passing | `uv run pytest -q` returned `20 passed in 0.18s` on 2026-10-02 |

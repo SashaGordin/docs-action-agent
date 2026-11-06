@@ -54,12 +54,12 @@ ADRs are append-only. A changed decision receives a new record that supersedes t
 
 ## ADR-006 — Provisional FastAPI English documentation corpus
 
-- **Status:** Provisionally accepted; pin and bounded path allowlist pending
-- **Date:** 2026-09-23
+- **Status:** Accepted and pinned
+- **Date:** 2026-09-23; accepted revision 2026-11-04
 - **Supersedes:** ADR-003's pending-approval status; retains its criteria and alternatives
 - **Context:** Sasha approved FastAPI English documentation as the provisional corpus for Session 1, subject to confirming an immutable upstream tag or commit and a bounded path allowlist before ingestion.
-- **Decision:** Select the English documentation in `fastapi/fastapi` as the provisional single corpus. Do not ingest or treat the corpus as fully approved until its exact tag/commit, included paths, exclusions, attribution, and durable source-URL rule have been reviewed and recorded.
-- **Consequences:** Corpus selection is no longer an open candidate choice, but corpus pinning remains a dated blocker. Translations, generated reference noise, unrelated repository content, and user-generated issue content remain out of scope.
+- **Decision:** Use five foundational English tutorial pages from FastAPI release `0.162.0`, pinned to commit `7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4`. The exact paths, byte sizes, SHA-256 hashes, exclusions, fetch method, attribution, and commit-pinned source-URL template are recorded in `corpus/fastapi-0.162.0.json`. Treat unlisted paths as denied by default.
+- **Consequences:** The first corpus is deliberately small enough to inspect and evaluate. Translations, release notes, generated reference material, examples outside the five selected pages, repository tests, issues, and user-generated content remain out of scope. A corpus upgrade requires a new manifest and comparable evaluation rather than mutating this record.
 - **Revisit when:** The proposed pin or bounded subset fails the criteria in `docs/SPEC.md`, is impractical to evaluate locally, or cannot preserve MIT attribution and durable citations.
 
 ## ADR-007 — Bounded model-directed tool selection

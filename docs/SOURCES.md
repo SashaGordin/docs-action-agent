@@ -93,4 +93,8 @@ Channel: [Manifold AI Learning](https://www.youtube.com/@ManifoldAILearning). Wa
 - [pytest repository](https://github.com/pytest-dev/pytest), whose project metadata declares MIT licensing and whose authored documentation is under `doc/`.
 - [uv repository](https://github.com/astral-sh/uv), with Markdown under `docs/` and dual [MIT](https://github.com/astral-sh/uv/blob/main/LICENSE-MIT) / [Apache-2.0](https://github.com/astral-sh/uv/blob/main/LICENSE-APACHE) licensing.
 
-Selection remains pending in ADR-003. Pin a tag/commit, paths, and attribution before ingestion.
+FastAPI was accepted in ADR-006 and pinned on 2026-11-04 to release `0.162.0`,
+commit `7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4`. The five allowed paths,
+hashes, exclusions, attribution, and durable source-URL rule are recorded in
+[`corpus/fastapi-0.162.0.json`](../corpus/fastapi-0.162.0.json) and
+[`corpus/ATTRIBUTION.md`](../corpus/ATTRIBUTION.md).

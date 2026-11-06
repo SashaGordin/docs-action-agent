@@ -1,0 +1,55 @@
+{
+  "schema_version": "1",
+  "corpus_name": "fastapi-english-tutorial-core",
+  "repository_url": "https://github.com/fastapi/fastapi",
+  "release_tag": "0.162.0",
+  "source_commit": "7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4",
+  "license": {
+    "spdx_id": "MIT",
+    "license_url": "https://github.com/fastapi/fastapi/blob/7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4/LICENSE",
+    "attribution": "Copyright (c) 2018 Sebastián Ramírez"
+  },
+  "included_paths": [
+    "docs/en/docs/tutorial/first-steps.md",
+    "docs/en/docs/tutorial/body.md",
+    "docs/en/docs/tutorial/response-model.md",
+    "docs/en/docs/tutorial/handling-errors.md",
+    "docs/en/docs/tutorial/testing.md"
+  ],
+  "excluded_paths": [
+    "docs/en/docs/release-notes.md",
+    "docs/en/docs/reference/**/*.md",
+    "docs_src/**/*.py",
+    "tests/**/*"
+  ],
+  "fetch_method": "github_raw_at_commit",
+  "source_url_template": "https://github.com/fastapi/fastapi/blob/{commit}/{path}",
+  "identity_scheme": "sha256-v1",
+  "files": [
+    {
+      "source_path": "docs/en/docs/tutorial/first-steps.md",
+      "content_sha256": "ecc419c9e4ccf1e996db0b196301aab93a8f43d52ddc59a180d4e88f8290c858",
+      "byte_size": 14155
+    },
+    {
+      "source_path": "docs/en/docs/tutorial/body.md",
+      "content_sha256": "1a3e0f7b9220dcee9a7379c999d57b49e126ed07725dbbc5566ee1278d4ec670",
+      "byte_size": 6611
+    },
+    {
+      "source_path": "docs/en/docs/tutorial/response-model.md",
+      "content_sha256": "1cb51565cc693ee12e8f9cb6bfeefdab18bc010457274a4d55836474a1bb04ee",
+      "byte_size": 15890
+    },
+    {
+      "source_path": "docs/en/docs/tutorial/handling-errors.md",
+      "content_sha256": "c0cb7aeafe8ed3802396f2421755cf1e740000347305c515a2c828c0c41f4b1a",
+      "byte_size": 9156
+    },
+    {
+      "source_path": "docs/en/docs/tutorial/testing.md",
+      "content_sha256": "759b81a9967dc50ec405877a23bb362d202e5d483fe38ad2308cb32a88eb8eda",
+      "byte_size": 5624
+    }
+  ]
+}

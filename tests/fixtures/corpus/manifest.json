@@ -1,0 +1,27 @@
+{
+  "schema_version": "1",
+  "corpus_name": "offline-contract-fixture",
+  "repository_url": "https://example.invalid/offline-corpus-fixture",
+  "release_tag": "fixture-v1",
+  "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "license": {
+    "spdx_id": "LicenseRef-Test-Fixture",
+    "license_url": "https://example.invalid/license",
+    "attribution": "Synthetic test fixture authored for this project"
+  },
+  "included_paths": [
+    "docs/en/docs/tutorial/*.md",
+    "docs/en/docs/tutorial/**/*.md"
+  ],
+  "excluded_paths": [],
+  "fetch_method": "checked_in_fixture",
+  "source_url_template": "https://example.invalid/blob/{commit}/{path}",
+  "identity_scheme": "sha256-v1",
+  "files": [
+    {
+      "source_path": "docs/en/docs/tutorial/body.md",
+      "content_sha256": "4b8f12dacf890129a9d09307da518f36ee9fa25731311afa5253253fec12ad09",
+      "byte_size": 141
+    }
+  ]
+}
